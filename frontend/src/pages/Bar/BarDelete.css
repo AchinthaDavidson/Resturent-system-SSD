@@ -1,0 +1,124 @@
+.carddel {
+    display: inline-block;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px rgb(0, 0, 0, 0.3);
+    width: 95%;
+    padding: 20px;
+    margin: 20px;
+    background-color: #fff;
+}
+
+.bardelheader {
+    font-size: 20px;
+    font-weight: 600;
+    color: black;
+}
+
+.Bardelform {
+    position: relative;
+    margin-top: 10px;
+    min-height: 100px;
+    background-color: #fff;
+}
+
+.Bardelform .fields {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.Bardelform .fields .input-field {
+    display: flex;
+    width: calc(100% / 2 - 15px); 
+    flex-direction: column;
+}
+
+.input-field .delProductCode .delProductName {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.input-field input {
+    outline: none;
+    padding: 0 15px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    height: 30px;
+    margin: 8px 0;
+}
+
+.input-field input:hover {
+    border-color: #ff8243;
+}
+
+
+/* .input-field input[type="file"] {
+    border: none;
+} */
+
+.Bardelform button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    max-width: 200px;
+    width: 100%;
+    border: none;
+    outline: none;
+    color: rgb(255, 255, 255);
+    background-color: rgba(53, 39, 68, 1);
+    border-radius: 5px;
+    margin: 25px 0;
+    transition: 0.3s ease-out;
+    cursor: pointer;
+    font-size: 15px;
+    float: right;
+}
+
+.Bardelform button:hover {
+    background-color: #ff8243;
+}
+
+.Barcancel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    max-width: 200px;
+    width: 100%;
+    float:right;
+    border: none;
+    outline: none;
+    color: #fff;
+    background-color: rgba(53, 39, 68, 1);
+    border-radius: 5px;
+    margin: 25px 0;
+    transition: 0.3s ease-out;
+    cursor: pointer;   
+    font-size: 15px;
+}
+
+.Barcancel:hover {
+    background-color: #ff8243;
+}
+
+.barDelDesc{
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 5px;
+}
+
+.barDelDesc .del-tbl-head{
+    font-weight: bold;
+}
+
+.tbl-dta:hover{
+    background-color: #ff8243;
+}
+td{
+    text-align: center;
+    padding: 10px;
+}

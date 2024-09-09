@@ -1,0 +1,109 @@
+.cardAdd {
+    display: inline-block;
+    border: 1px solid #eee;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px rgb(0, 0, 0, 0.3);
+    width: auto;
+    padding: 20px;
+    margin: 20px;
+}
+
+.card1{
+    display: inline-block;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px rgb(0, 0, 0, 0.3);
+    width: 97%;
+    padding: 20px;
+    margin: 20px;
+    background-color: #fff;
+}
+
+header {
+    font-size: 20px;
+    font-weight: 600;
+    color: black;
+}
+
+.ResturantaddForm {
+    position: relative;
+    margin-top: 10px;
+    min-height: 100px;
+    background-color: #fff;
+}
+
+.ResturantaddForm .fields {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.ResturantaddForm .fields .input-field {
+    display: flex;
+    width: calc(100% / 3 - 15px);
+    flex-direction: column;
+}
+
+.input-field .ResturantaddProductCode .ResturantaddProductName .ResturantaddUnit
+.ResturantaddQuantity .ResturantaddBuyDate .ResturantaddBuyCost .ResturantaddSupplier 
+.ResturantaddUnitPrice .ResturantaddReOrderLevel .ResturantaddExpireDate {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+select{
+    outline: none;
+    padding: 0 15px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    height: 30px;
+    margin: 8px 0;
+}
+
+select:hover{
+    border-color:#ff8243 ;
+}
+
+.input-field input {
+    outline: none;
+    padding: 0 15px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    height: 30px;
+    margin: 8px 0;
+}
+
+.input-field input:hover {
+    border-color: #ff8243;
+}
+
+.input-field input[type="file"] {
+    border: none;
+}
+
+.Resturantbtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    max-width: 200px;
+    width: 100%;
+    border: none;
+    outline: none;
+    color: #fff;
+    background-color: rgba(53, 39, 68, 1);
+    border-radius: 5px;
+    margin: 25px 0;
+    transition: 0.3s ease-out;
+    cursor: pointer;
+    font-size: 15px;
+    float: right;
+}
+
+.Resturantbtn:hover {
+     background: #ff8243; 
+}
+
+

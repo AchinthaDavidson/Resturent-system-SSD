@@ -1,0 +1,36 @@
+
+
+
+
+.ResDelDesc{
+    border-collapse: collapse;
+    width: 100%;
+    /* border: 1px solid rgb(255, 255, 255); */
+    border-radius: 5px;
+    text-align: center;
+
+}
+
+.ResDelDesc .del-tbl-head{
+    font-weight: bold;
+    background-color: white;
+}
+
+.del-tbl-data{
+    text-align: center;
+    padding: 10px;
+    background-color: white;
+    
+}
+
+.billdata1{
+  margin-left: 40px;
+}
+.billdata2{
+  margin-left: 28px;
+  
+}
+.billdata3{
+ position: absolute;
+ right:0;
+}

@@ -1,0 +1,136 @@
+
+
+
+body {
+  
+  background-repeat: no-repeat;
+  background-attachment: fixed;  
+  background-size: cover;
+ 
+}
+
+.backgroundBorder{
+  background-color:rgb(255, 255, 255);
+  margin-right: 5%;
+  margin-left: 5%;
+  border-radius: 20px;
+
+}
+
+.anInput {
+  width: 80%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid rgb(77, 76, 72);
+  border-radius: 4px;
+}
+
+/* .anInput:hover {
+  background-color: #ffae00;
+  color: rgb(0, 0, 0);
+} */
+
+.anInput:hover{
+  border-color:#ff8243 ;
+}
+
+.dishDataDiv{
+ overflow-y: auto ;
+  width: 100%;
+  margin: auto auto;
+  text-align: center;
+  background-color: rgba(255, 255, 255,0.9);
+  font-weight: bolder;
+  /* background-image: url('../Food/back1.jpg'); */
+
+}
+
+.boldfont{
+  padding-top: 2rem;
+}
+
+.headingtable{
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin: auto auto;
+  text-align: center;
+  height: auto;
+  width: 90%;
+}
+
+#id{
+  width: 20%;
+}
+
+.middlebtns{
+  margin-top: 1rem;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  float: center;
+  margin-right: 30px;
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  background-color: rgba(53, 39, 68, 1);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
+
+.middlebtns2{
+  padding: 10px 20px;
+  float: center;
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  background-color: rgba(53, 39, 68, 1);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.middlebtns:hover{
+  background-color: #ff8243;
+}
+
+.middlebtns2:hover{
+  background-color: #ff8243;
+}
+
+
+
+.theModal{
+position:fixed;
+top: 20%;
+left: 25%;
+/* transform: translate(-50%, -50%); */
+width: 50%;
+margin: auto auto 1rem;
+text-align: center;
+padding: 1rem;
+background-color: rgb(89, 81, 95);
+color: white;
+
+
+}
+
+.modalTable{
+  width: 100%;
+}
+
+.modaltd{
+  background-color: transparent;
+}
+
+
+
+
+
+
+.btns{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}

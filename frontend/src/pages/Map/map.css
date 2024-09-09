@@ -1,0 +1,20 @@
+
+.mapContainer{
+    position: relative;
+    width: 80vh;
+    height: 60vh;
+    overflow: auto;
+    margin: auto auto;
+}
+.positionDiv{
+    align-content: center;
+    margin: auto auto;
+    position: relative;
+    width: "90%";
+    height: 60vh;
+}
+
+#map *{
+    overflow: visible;
+}
+
