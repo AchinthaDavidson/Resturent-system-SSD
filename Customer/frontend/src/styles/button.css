@@ -1,0 +1,23 @@
+.button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.button-container .button {
+  background-color: #bdbdbd;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Nunito Bold";
+  font-size: 14px;
+  min-width: 300px;
+  padding: 6px;
+  border: none;
+  outline: none;
+  transition: 0.3s ease-in-out;
+}
+.button-container .button:hover {
+  background-color: #a4a4a4;
+}/*# sourceMappingURL=button.css.map */

@@ -1,0 +1,16 @@
+.container1{
+    height: 75vh;
+    background-color: aliceblue;
+    margin: 20vh 40vh 10vh 40vh;
+    border: none;
+    border-radius: 20px;
+    display: flex;
+}
+
+.sideb{
+    background-color: rgb(192, 192, 192);
+    border-radius: 20px 0 0 20px;
+    height: 75vh;
+    border: none;
+    
+}
