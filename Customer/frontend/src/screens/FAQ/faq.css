@@ -1,0 +1,70 @@
+.icon{
+    color: rgb(255, 255, 255);
+    font-size: 50px;
+    margin-left:0;
+    padding: 0%;
+}
+
+.name{
+    color: #ffffff;
+    font-size: 30px;
+    padding: 0%;
+    font-family: 'Trebuchet MS';
+    font-weight: lighter;
+    padding-bottom: 5%;
+}
+
+.box{
+    padding: 5%;
+    background-image: linear-gradient(to top, #a30b0b 0%, #ba3c3c 100%);    margin: 2%; 
+    padding:2%;
+    border-radius: 15px 30px 30px 5px;
+}
+
+.btnE{
+    
+    background-color: none;
+    margin-left: 95%;
+    margin-top: -10%;
+    color: #ffffff;
+    font-size: 30px;
+}
+
+.rotated {
+    transform: rotate(180deg);
+  }
+
+.text{
+    font-family: 'Arial';
+    font-size: 20px;
+    color: #e6e6e6;
+}
+
+.expand{
+    margin-top: 3%;
+}
+
+.maintxt{
+    text-align: center;
+}
+
+.btm{
+    text-align: center;
+    color: #ffffff;
+}
+
+
+.button-2{
+    margin-top: 15px;
+    color: black;
+    font-size: 22px;
+    padding: 12px;
+    border: none;
+    border-radius: 50px 50px 50px 0px;
+    background-color: #dfdf00;
+}
+
+.button-2:hover{
+    background-color:#f6ff00;
+    transform: scale(1.02) ;
+}

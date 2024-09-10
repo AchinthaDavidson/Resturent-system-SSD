@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard/Dashboard.jsx';
+import Login from './pages/Login/login.jsx';
 import Order from './pages/Order/Order.jsx';
 import Restaurant from './pages/Restaurant/Restaurant.jsx';
 import RestaurantAdd from './pages/Restaurant/RestaurantAdd';
@@ -31,10 +32,12 @@ const App = () => {
   return (
    
     <BrowserRouter>
-    
+     <Routes>
+     <Route path="/" element={<Login/>} />
+     </Routes>
       <Sidebar>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+         
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/Notification" element={<Notification />} />
           <Route path="/Order" element={<Order />} />

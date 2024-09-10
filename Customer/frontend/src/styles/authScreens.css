@@ -1,0 +1,138 @@
+.card-wrapper {
+  height: 110vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card-wrapper .reverse-flex {
+  flex-direction: row-reverse;
+}
+.card-wrapper .content-card {
+  width: 100%;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+.card-wrapper .content-card .side {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  background-color: #fff;
+}
+.card-wrapper .content-card .side .form-container {
+  margin: auto;
+  width: 80%;
+  max-width: 360px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 32px;
+  row-gap: 16px;
+}
+.card-wrapper .content-card .side .form-container .forgot-pass-clarification {
+  font-family: "Nunito Regular";
+  font-size: 14px;
+  color: #424242;
+  text-align: left;
+  margin-bottom: 30px;
+}
+.card-wrapper .content-card .side .full-width {
+  max-width: 100%;
+  padding: 20px;
+  
+}
+.card-wrapper .content-card .side .flexRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  -moz-column-gap: 8px;
+       column-gap: 8px;
+}
+.card-wrapper .content-card .side .link {
+  color: #424242;
+  font-family: "Nunito Bold";
+  font-size: 14px;
+  text-decoration: none;
+  width: 100%;
+  text-align: right;
+}
+.card-wrapper .content-card .side .title {
+  font-family: "Nunito Bold";
+  font-size: 32px;
+  color: #000;
+}
+.card-wrapper .content-card .side .link-container {
+  font-family: "Nunito Regular";
+  font-size: 16px;
+}
+.card-wrapper .content-card .side .link-container .link {
+  font-size: 16px;
+}
+.card-wrapper .content-card .image-side {
+  background-image: url(../assets/images/auth-bg.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+.card-wrapper .content-card .image-side .image-side-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  row-gap: 20px;
+}
+
+@media screen and (max-width: 1024px) {
+  .card-wrapper .content-card .side {
+    overflow-y: overlay;
+  }
+  .card-wrapper .content-card .side .form-container {
+    height: auto !important;
+  }
+}
+@media screen and (max-width: 1280px) {
+  .card-wrapper .content-card .image-side {
+    width: 70%;
+  }
+}
+@media screen and (max-width: 992px) {
+  .card-wrapper .content-card .side .flexRow {
+    flex-direction: column;
+    row-gap: 8px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .card-wrapper .content-card {
+    flex-direction: column-reverse;
+    height: 100%;
+    justify-content: flex-end;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .card-wrapper .content-card .side {
+    padding: 50px 0;
+  }
+  .card-wrapper .content-card .side .form-container {
+    padding: 0 16px;
+  }
+  .card-wrapper .content-card .image-side {
+    height: 30%;
+    width: 100%;
+  }
+}/*# sourceMappingURL=authScreens.css.map */

@@ -1,0 +1,45 @@
+#cursive{
+    color: #498e29;
+    font-family: 'Homemade Apple', cursive;
+    padding-bottom: 20px;
+}
+
+.btn{
+    background-color: #920000;
+    color: #ffffff;
+    border: none;
+  }
+
+  .btn:hover{
+    background-color: #343434;
+    color: #ffffff;
+    border: none;
+  }
+
+
+  .dropdown-item{
+    background-color: white;
+    color: #498e29;
+  }
+
+  .text-center2{
+    border-bottom: 3px solid #171717; 
+    line-height: 0.1em;
+    margin: 60px 0;
+    text-align: center;
+  }
+
+  .text-center2 span{
+    background:#000000; 
+    padding:0 10px; 
+
+  }
+
+  .card-title{
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .card-text{
+    font-size: 20px;
+  }
