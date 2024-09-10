@@ -26,6 +26,9 @@ connection.once("open",()=>{
     console.log("db connect success!");
 })
 
+const userRouter= require("./routes/user.js");
+app.use("/user", userRouter);
+
 const coustomerRouter= require("./routes/customer.js");
 app.use("/customer", coustomerRouter);
 
