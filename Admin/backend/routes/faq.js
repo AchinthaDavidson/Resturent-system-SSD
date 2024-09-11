@@ -1,78 +1,118 @@
-const router = require("express").Router();
-let faq = require("../models/faq");
+const express = require("express");
+const router = express.Router();
+const faq = require("../models/faq");
+const { body, param, validationResult } = require('express-validator');
+const rateLimit = require('express-rate-limit');
 
-//create
+// Rate limiting middleware
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: "Too many requests, please try again later."
+});
 
-router.route("/add").post((req,res) =>{
+router.use(apiLimiter);
 
-    const category = req.body.category;
-    const question = req.body.question;
-    const answer = req.body.answer;
+// Create FAQ
+router.route("/add").post(
+    [
+        body('category').isString().trim().escape(),
+        body('question').isString().trim().escape(),
+        body('answer').isString().trim().escape()
+    ],
+    (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
-    const newFaq = new faq({
+        const { category, question, answer } = req.body;
 
-        category,
-        question,
-        answer
+        const newFaq = new faq({
+            category,
+            question,
+            answer
+        });
 
-    })
-
-    newFaq.save().then(() =>{
-        res.json("New FAQ added");
-    }).catch((err) =>{
-        console.log(err);
-    })
-
-})
-
-
-
-//Read
-
-router.route("/").get((req,res) =>{
-
-    faq.find().then((faq) =>{
-        res.json(faq)
-    }).catch((err) =>{
-        console.log(err)
-    })
-})
-
-//Update
-
-router.route("/update/:id").put(async(req,res)=>{
-    let fId = req.params.id;
-    const {category, question, answer} = req.body;
-
-    const updateFaq = {
-        category, 
-        question,
-        answer
+        newFaq.save()
+            .then(() => res.json("New FAQ added"))
+            .catch((err) => {
+                console.log(err);
+                res.status(500).send("Error adding FAQ");
+            });
     }
+);
 
-    const update = await faq.findByIdAndUpdate(fId, updateFaq).then(() =>{
-        res.status(200).send({status: "FAQ updates"})
-    }).catch((err) =>{
-        console.log(err);
-        res.status(500).send({status: "Failed to update"})
-    })
-})
+// Read FAQs
+router.route("/").get((req, res) => {
+    faq.find()
+        .then((faqs) => res.json(faqs))
+        .catch((err) => {
+            console.log(err);
+            res.status(500).send("Error fetching FAQs");
+        });
+});
 
+// Update FAQ
+router.route("/update/:id").put(
+    [
+        param('id').isMongoId(),
+        body('category').optional().isString().trim().escape(),
+        body('question').optional().isString().trim().escape(),
+        body('answer').optional().isString().trim().escape()
+    ],
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
-//Delete
+        const fId = req.params.id;
+        const { category, question, answer } = req.body;
 
-router.route("/delete/:id").delete(async(req,res) =>{
+        try {
+            // Find the document by ID
+            const faqItem = await faq.findById(fId);
+            if (!faqItem) {
+                return res.status(404).send({ status: "FAQ not found" });
+            }
 
-    let fid = req.params.id;
+            // Apply updates
+            if (category) faqItem.category = category;
+            if (question) faqItem.question = question;
+            if (answer) faqItem.answer = answer;
 
-    await faq.findByIdAndDelete(fid).then(() =>{
-        res.status(200).send({status: "FAQ delete"});
-    }).catch((err) =>{
-        console.log(err.message);
-        res.status(500).send({status: "Failed to delete FAQ"});
-    })
-})
+            // Save the updated document
+            await faqItem.save();
+            res.status(200).send({ status: "FAQ updated" });
+        } catch (err) {
+            console.log(err);
+            res.status(500).send({ status: "Failed to update FAQ" });
+        }
+    }
+);
 
+// Delete FAQ
+router.route("/delete/:id").delete(
+    [
+        param('id').isMongoId()
+    ],
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
+        const fid = req.params.id;
+
+        try {
+            await faq.findByIdAndDelete(fid);
+            res.status(200).send({ status: "FAQ deleted" });
+        } catch (err) {
+            console.log(err.message);
+            res.status(500).send({ status: "Failed to delete FAQ" });
+        }
+    }
+);
 
 module.exports = router;
