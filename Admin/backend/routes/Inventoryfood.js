@@ -49,10 +49,7 @@ router.route("/find/:id").get((req,res)=>{
 })
 
 router.route("/delete/:id").delete(async(req,res)=>{
-
-    
-
-    await Inventoryfood.deleteOne({_id:req.params.id})
+await Inventoryfood.deleteOne({_id:req.params.id})
 
     .then(()=>{
             res.status(200).send({status:"user deleted"});

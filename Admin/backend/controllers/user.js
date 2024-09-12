@@ -44,7 +44,15 @@ exports.userRegister = async (req, res) => {
 exports.userLogin = async (req, res) => {
     try {
         const { password, email } = req.body;
+        console.log(password)
         const payload = await login(email, password);
+
+        res.cookie('token', payload, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',  // Use secure cookies in production
+            sameSite: 'Lax',  // Use 'Lax' or 'None' for cross-origin requests with credentials
+            maxAge: 24 * 60 * 60 * 1000,  // 24 hours
+        });
 
         res.status(200).send(payload);
     } catch (err) {
