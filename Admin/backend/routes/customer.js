@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 let Customer = require("../models/customer");
 const rateLimit = require('express-rate-limit');
-
+const { authGurd } = require("../utils/validator");
 // Rate limiting middleware
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -13,7 +13,7 @@ const apiLimiter = rateLimit({
 // Apply rate limiter to all routes
 router.use(apiLimiter);
 
-
+router.use(authGurd)
 // ADD coustomer
 router.route("/add").post((req,res)=>{
 
