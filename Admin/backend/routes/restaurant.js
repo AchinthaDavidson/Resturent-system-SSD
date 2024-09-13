@@ -2,6 +2,23 @@ const router = require('express').Router();
 const Inventoryfood = require('../models/Inventoryfood');
 let Restaurant = require('../models/restaurant');  
 let food=require('../models/food');
+const rateLimit = require('express-rate-limit');
+const mongoose = require('mongoose');  
+const { body, validationResult } = require('express-validator');
+
+// Rate limiting middleware
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per window
+    message: "Too many requests, please try again later."
+});
+
+// Apply rate limiter to all routes
+router.use(apiLimiter);
+
+function isValidObjectId(id) {
+    return mongoose.Types.ObjectId.isValid(id);
+}
 
 /* add */
 router.route("/add").post((req,res)=>{
@@ -145,60 +162,62 @@ router.route("/update1/:id").post(async(req,res)=>{
     
 })
 
-router.route("/updateqty").post(async(req,res)=>{
+router.route("/updateqty").post(async (req, res) => {
+    const Id = req.body.list;
 
-   const Id = req.body.list;
-   
-for(let i=0;i<Id.length;i++){
-// console.log(Id[i]);
-        food.find({_id:Id[i].Iid}).then((food)=>{
-         const Ingridients=food[0].Ingridients;
-       
-         console.log("hi resturent")
-         
-         Ingridient(Ingridients,Id[i].quantity)
-        //  console.log(food[0].Ingridients)
-
-        }).catch((err)=>{
-            console.log(err)
-        })
+    // Validate each ID before using it in a query
+    for (let i = 0; i < Id.length; i++) {
+        if (!isValidObjectId(Id[i].Iid)) {
+            return res.status(400).json({ error: `Invalid ID format for Iid: ${Id[i].Iid}` });
+        }
     }
 
-function Ingridient(Ingridients,count) {
-    for(let i=0;i<Ingridients.length;i++){
-    
-        // console.log("hi")
+    for (let i = 0; i < Id.length; i++) {
+        food.findById(Id[i].Iid).then((food) => {
+            if (!food) {
+                return res.status(404).json({ error: `Food item not found for Iid: ${Id[i].Iid}` });
+            }
 
-     Restaurant.find({Item_Id:Ingridients[i].id}).then((Restaurant)=>{
-           const  Quantity1 =Restaurant[0].Quantity
-        
-    
-            update2(Quantity1,Ingridients[i].quantity,Ingridients[i].id,count)
-            // console.log(Quantity1)
-            
-        }).catch((err)=>{
-            console.log(err)
-        })
-    
-    }  
-}
-    function update2(qty,Quantity,id,count){
-        var Quantity3=qty-(Quantity*count)
+            const Ingridients = food.Ingridients;
+            console.log("hi restaurant");
 
-      
- 
-         Restaurant.updateOne({Item_Id:id},{$set:{Quantity:Quantity3}})
- 
-         .then(()=>{
-            //  res.status(200).send({status:"bar inventory updated"})
-             console.log("rtgdrg");
-         }).catch((err)=>{
-             console.log(err);
-             res.status(500).send({status:"bar inventory update failed", error:err});
-         })
-         
-     }
+            Ingridient(Ingridients, Id[i].quantity);
+        }).catch((err) => {
+            console.log(err);
+            return res.status(500).json({ error: "Database query failed" });
+        });
+    }
 
+    function Ingridient(Ingridients, count) {
+        for (let i = 0; i < Ingridients.length; i++) {
+            if (!isValidObjectId(Ingridients[i].id)) {
+                return res.status(400).json({ error: `Invalid ID format for ingredient: ${Ingridients[i].id}` });
+            }
+
+            Restaurant.findById(Ingridients[i].id).then((Restaurant) => {
+                if (!Restaurant) {
+                    return res.status(404).json({ error: `Restaurant item not found for ID: ${Ingridients[i].id}` });
+                }
+
+                const Quantity1 = Restaurant.Quantity;
+                update2(Quantity1, Ingridients[i].quantity, Ingridients[i].id, count);
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
+    }
+
+    function update2(qty, Quantity, id, count) {
+        var Quantity3 = qty - (Quantity * count);
+
+        Restaurant.updateOne({ _id: id }, { $set: { Quantity: Quantity3 } })
+            .then(() => {
+                console.log("Inventory updated");
+            }).catch((err) => {
+                console.log(err);
+                res.status(500).send({ status: "Inventory update failed", error: err });
+            });
+    }
 });
 
 

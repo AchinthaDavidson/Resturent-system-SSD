@@ -1,211 +1,148 @@
-const router = require('express').Router();
-let Bar = require('../models/barinventory');
+const express = require('express');
+const router = express.Router();
+const Bar = require('../models/barinventory');
 const barInv = require('../models/barinventory_data');
+const rateLimit = require('express-rate-limit');
+const { body, validationResult, param } = require('express-validator');
+
+
+// Rate limiting middleware
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per window
+    message: "Too many requests, please try again later."
+});
+
+// Apply rate limiter to all routes
+router.use(apiLimiter);
 
 /* add */
-router.route("/add").post((req,res)=>{
-console.log("add methodc called")
+router.route("/add").post(
+    [
+        body('code').isAlphanumeric().withMessage('Product code should be alphanumeric'),
+        body('name').isString().withMessage('Product name should be a string'),
+        body('type').isString().withMessage('Product type should be a string'),
+        body('catogary').isString().withMessage('Category should be a string'),
+        body('quantity').isInt({ min: 1 }).withMessage('Quantity should be a positive integer'),
+        body('newTotCost').isFloat({ min: 0 }).withMessage('Total cost should be a valid number'),
+        body('Reorderlevel').isInt({ min: 0 }).withMessage('Reorder level should be a non-negative integer'),
+        body('Location').isURL().optional().withMessage('Image URL should be valid'),
+    ],
+    (req, res) => {
+        console.log("add method called");
 
-    const Product_Code = req.body.code;
-    const Product_Name = req.body.name;
-    const Product_Type = req.body.type; 
-    const Catogary = req.body.catogary;
-    const Quantity = req.body.quantity;
-    const Total_Cost = Number(req.body.newTotCost);
-    const Re_Order_Level = req.body.Reorderlevel;
-    const ImageURL = req.body.Location;
+        // Check validation result
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
-    // const Product_Name = 'req.body.name';
-    // const Product_Code = 'req.body.code';
-    // const Product_Type = 'req.body.type'; 
-    // const Catogary = 'req.body.catogary';
-    // const Quantity = 'req.body.quantity';
-    // const Total_Cost = 'req.body.Buycost';
-    // const Re_Order_Level = 'req.body.Reorderlevel';
-    // const ImageURL = 'req.body.ImageURL';
+        const { 
+            code, 
+            name, 
+            type, 
+            catogary, 
+            quantity, 
+            newTotCost, 
+            Reorderlevel, 
+            Location } 
+            = req.body;
 
-    const newbar = new Bar({
-        Product_Code,
-        Product_Name,
-        Product_Type,
-        Catogary,
-        Quantity,
-        Total_Cost,
-        Re_Order_Level,
-       ImageURL
-    })
-    console.log(newbar);
+        const newbar = new Bar({
+            Product_Code: code,
+            Product_Name: name,
+            Product_Type: type,
+            Catogary: catogary,
+            Quantity: quantity,
+            Total_Cost: Number(newTotCost),
+            Re_Order_Level: Reorderlevel,
+            ImageURL: Location
+        });
 
-    newbar.save().then(()=>{
-        res.json("Bottle added");
-    }).catch((err)=>{
-        console.log(err);
-    })
-})
+        newbar.save().then(() => {
+            res.json("Bottle added");
+        }).catch((err) => {
+            console.log(err);
+        });
+    });
 
 /* update */
-router.route("/update/:id").put(async(req,res)=>{
+router.route("/update/:id").put(
+    [
+        param('id').isAlphanumeric().withMessage('ID should be alphanumeric'),
+        body('name').isString().withMessage('Product name should be a string'),
+        body('type').isString().withMessage('Product type should be a string'),
+        body('catogary').isString().withMessage('Category should be a string'),
+        body('quantity2').isInt({ min: 0 }).withMessage('Quantity should be a non-negative integer'),
+        body('Totalcost2').isFloat({ min: 0 }).withMessage('Total cost should be a valid number'),
+        body('Reorderlevel').isInt({ min: 0 }).withMessage('Reorder level should be a non-negative integer'),
+    ],
+    async (req, res) => {
+        // Check validation result
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
-    let userid = req.params.id;
+        let userid = req.params.id;
 
-   // const Product_Code = req.body.code;
-    const Product_Name = req.body.name;
-    const Product_Type = req.body.type; 
-    const Catogary = req.body.catogary;
-    const Quantity = req.body.quantity2;
-    const Total_Cost = Number(req.body.Totalcost2);
-    const Re_Order_Level = req.body.Reorderlevel;
+        const { name, type, catogary, quantity2, Totalcost2, Reorderlevel } = req.body;
 
-    // const Product_Name = 'req.body.name';
-    // const Product_Type = 'req.body.type'; 
-    // const Catogary = 'req.body.catogary';
-    // const Quantity = 'req.body.quantity';
-    // const Total_Cost = 'req.body.Totalcost';
-    // const Re_Order_Level = 'req.body.Reorderlevel';
+        const updatebar = {
+            Product_Name: name,
+            Product_Type: type,
+            Catogary: catogary,
+            Quantity: quantity2,
+            Total_Cost: Number(Totalcost2),
+            Re_Order_Level: Reorderlevel
+        };
 
-    const updatebar = {Product_Name,Product_Type,Catogary,Quantity,Total_Cost,Re_Order_Level};
-
-    await Bar.updateOne({Product_Code:userid},{$set:updatebar})
-    .then(()=>{
-        res.status(200).send({status:"bar inventory updated"})
-    }).catch((err)=>{
-        console.log(err);
-        res.status(500).send({status:"bar inventory update failed", error:err});
-    })
-})
-
-
-/*delete*/
-// router.route("/delete/:id").delete(async(req,res)=>{
-    
-//     let userid = req.params.id;
-
-//     await barInv.findByIdAndDelete(userid).then(()=>{
-//         res.status(200).send({status:"bar detail deleted", user : userid})
-//     }).catch((err)=>{
-//         console.log(err);
-//         res.status(500).send({status:"bar detail delete failed", error:err});
-//     })
-// })
-
-/* display*/
-router.route("/").get((req,res)=>{
-
-    Bar.find().sort({Product_Name:1}).then((bars)=>{
-        res.json(bars)
-    }).catch((err)=>{
-        console.log(err);
-    })
-})
-
-router.route("/update1/:id").post(async(req,res)=>{
-    let Id = req.params.id;
-
-    // const Quantity = 10;
-    // const Total_Cost = 6000;
-
-    const Quantity = req.body.Quantity1;
-    const Total_Cost = req.body.cost;
-
-
-    Bar.find({Product_Code:req.params.id}).then((barinventory)=>{
-        var Quantity1 = barinventory[0].Quantity
-        var cost1 = barinventory[0].Total_Cost
-
-        update2(Quantity1,cost1)
-        // console.log(barinventory);
-    }).catch((err)=>{
-        console.log(err);
-    })
-
-    function update2(qty,cost3){
-        var quantity3 = Number(qty-Quantity)
-        var Total_Cost3 = Number(cost3-Total_Cost)
-
-        Bar.updateOne({Product_Code:Id},{$set:{Quantity:quantity3,Total_Cost:Total_Cost3}})
-        .then(()=>{
-            res.status(200).send({status:"bar inventory updated"})
-        }).catch((err)=>{
-            console.log(err);
-            res.status(500).send({status:"bar inventory update failed", error:err});
-        })
-    }
-})
-
-
-
-/* display*/
-
-router.route("/viewbarInventory").get((req,res)=>{
-
-
-})
-
-router.route("/sum/").get((req,res)=>{
-   
-    Bar.aggregate([{$group:{_id:null ,price:{$sum: "$Total_Cost"}}}]).then((Bar)=>{
-                res.json(Bar)
-            }).catch((err)=>{
-                console.log(err)
+        await Bar.updateOne({ Product_Code: userid }, { $set: updatebar })
+            .then(() => {
+                res.status(200).send({ status: "bar inventory updated" });
             })
-        })
+            .catch((err) => {
+                console.log(err);
+                res.status(500).send({ status: "bar inventory update failed", error: err });
+            });
+    });
 
+/* update by quantity */
+router.route("/updateqty").post(
+    [
+        body('list').isArray().withMessage('List should be an array of items'),
+        body('list.*.description').isAlphanumeric().withMessage('Product description should be alphanumeric'),
+        body('list.*.quantity').isInt({ min: 0 }).withMessage('Quantity should be a non-negative integer')
+    ],
+    async (req, res) => {
+        const { list } = req.body;
+        console.log("update");
+        console.log(list);
 
+        // Iterate over the list
+        for (let i = 0; i < list.length; i++) {
+            Bar.find({ Product_Code: list[i].description }).then((Bar) => {
+                const Quantity1 = Bar[0].Quantity;
 
-router.route("/updateqty").post(async(req,res)=>{
+                update2(Quantity1, list[i].quantity, list[i].description);
+                console.log(Quantity1);
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
 
-            const Id = req.body.list;
-            console.log("update")
-            console.log(Id);
-        //  for(let i=0;i<Id.length;i++){
-         
-        //          food.find({_id:Id[i].Iid}).then((food)=>{
-        //           const Ingridients=food[0].Ingridients;
-                
-        //           console.log("hi")
-                  
-        //           Ingridient(Ingridients,Id[i].quantity)
-        //          //  console.log(food[0].Ingridients)
-         
-        //          }).catch((err)=>{
-        //              console.log(err)
-        //          })
-        //      }
-         
-    
-             for(let i=0;i<Id.length;i++){
-             
-                 // console.log("hi")
-         
-                 Bar.find({Product_Code:Id[i].description}).then((Bar)=>{
-                    const  Quantity1 =Bar[0].Quantity
-                 
-             
-                     update2(Quantity1,Id[i].quantity,Id[i].description)
-                     console.log(Quantity1)
-                     
-                 }).catch((err)=>{
-                     console.log(err)
-                 })
-             
-             }  
-       
-             function update2(qty,Quantity,id){
-                 var Quantity3=Number(qty-Quantity)
-         
-               
-          
-                  Bar.updateOne({Product_Code:id},{$set:{Quantity:Quantity3}})
-          
-                  .then(()=>{
-                     //  res.status(200).send({status:"bar inventory updated"})
-                      console.log("rtgdrg");
-                  }).catch((err)=>{
-                      console.log(err);
-                      res.status(500).send({status:"bar inventory update failed", error:err});
-                  })
-                  
-              }
-         
-         });
+        function update2(qty, Quantity, id) {
+            var Quantity3 = Number(qty - Quantity);
+
+            Bar.updateOne({ Product_Code: id }, { $set: { Quantity: Quantity3 } })
+                .then(() => {
+                    console.log("Inventory updated");
+                })
+                .catch((err) => {
+                    console.log(err);
+                    res.status(500).send({ status: "bar inventory update failed", error: err });
+                });
+        }
+    });
+
 module.exports = router;

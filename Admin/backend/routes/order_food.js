@@ -2,7 +2,17 @@ const router = require("express").Router();
 // const { default: Order } = require("../../frontend/src/pages/Order/Order");
 const order_food = require("../models/order_food");
 // const Coustomer = require("../models/coustomer");
+const rateLimit = require('express-rate-limit');
 
+// Rate limiting middleware
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per window
+    message: "Too many requests, please try again later."
+});
+
+// Apply rate limiter to all routes
+router.use(apiLimiter);
 
 
 // ADD order food
