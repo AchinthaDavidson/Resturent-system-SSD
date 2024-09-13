@@ -5,6 +5,7 @@ const barInv = require('../models/barinventory_data');
 const rateLimit = require('express-rate-limit');
 const { body, validationResult, param } = require('express-validator');
 
+
 // Rate limiting middleware
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
