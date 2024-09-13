@@ -1,7 +1,18 @@
 const User = require("../models/user");
 const { createPasswordHash, signToken, validatePassword } = require("./auth");
+const { body, validationResult } = require("express-validator"); 
+
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple regex for email validation
+    return emailRegex.test(email);
+}
 
 async function findUserById(email) {
+    // Validate email before querying
+    if (!isValidEmail(email)) {
+        throw new Error('Invalid email format');
+    }
+
     const existingUser = await User.findOne({ email });
     const userPayload = JSON.parse(JSON.stringify(existingUser));
     
@@ -13,6 +24,11 @@ async function findUserById(email) {
 }
 
 async function register(email, fname, lname, password) {
+    // Validate email before proceeding
+    if (!isValidEmail(email)) {
+        throw new Error('Invalid email format');
+    }
+
     const hash = await createPasswordHash(password);
 
     const newUser = new User({
@@ -32,6 +48,11 @@ async function register(email, fname, lname, password) {
 }
 
 async function login(email, password) {
+    // Validate email before querying
+    if (!isValidEmail(email)) {
+        throw new Error('Invalid email format');
+    }
+
     const acc = await User.findOne({ email });
 
     if (!acc) {
