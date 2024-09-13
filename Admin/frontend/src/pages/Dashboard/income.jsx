@@ -30,61 +30,61 @@ const [url3,setUrl3] =useState("http://localhost:8070/Inventoryfood/sum/"+month)
 const [url4,setUrl4] =useState("http://localhost:8070/Bardata/sum/"+day)
 const [url5,setUrl5] =useState("http://localhost:8070/Bardata/sum/"+month)
 
-      axios.get(url).then((res) => {
-        setsalesrate(res.data);
-        if (salesrate.length === 0) {
+      // axios.get(url).then((res) => {
+      //   setsalesrate(res.data);
+      //   if (salesrate.length === 0) {
          
-        } else {
-          setsalesd(res.data[0].price);
-        }
-      });
+      //   } else {
+      //     setsalesd(res.data[0].price);
+      //   }
+      // });
 
-      axios.get(url1).then((res) => {
-        setsalecost(res.data)
-        if (salecost.length === 0) {
+      // axios.get(url1).then((res) => {
+      //   setsalecost(res.data)
+      //   if (salecost.length === 0) {
           
-        } else {
-          setcostd1(res.data[0].price);
-        }
+      //   } else {
+      //     setcostd1(res.data[0].price);
+      //   }
         
-      });
-      axios.get(url2).then((res) => {
-        setsalesrate(res.data);
-        if (salesrate.length === 0) {
+      // });
+      // axios.get(url2).then((res) => {
+      //   setsalesrate(res.data);
+      //   if (salesrate.length === 0) {
          
-        } else {
-          setsalesm(res.data[0].price);
-        }
-      });
+      //   } else {
+      //     setsalesm(res.data[0].price);
+      //   }
+      // });
   
-      axios.get(url3).then((res) => {
-        setsalecost(res.data)
-        if (salecost.length === 0) {
+      // axios.get(url3).then((res) => {
+      //   setsalecost(res.data)
+      //   if (salecost.length === 0) {
          
-        } else {
-          setcostm1(res.data[0].price);
-        }
+      //   } else {
+      //     setcostm1(res.data[0].price);
+      //   }
         
-      });
-      axios.get(url4).then((res) => {
-        setsalecost(res.data)
-        if (salecost.length === 0) {
+      // });
+      // axios.get(url4).then((res) => {
+      //   setsalecost(res.data)
+      //   if (salecost.length === 0) {
          
-        } else {
-          setcostd2(res.data[0].price);
-        }
+      //   } else {
+      //     setcostd2(res.data[0].price);
+      //   }
         
-      });
+      // });
   
-      axios.get(url5).then((res) => {
-        setsalecost(res.data)
-        if (salecost.length === 0) {
+      // axios.get(url5).then((res) => {
+      //   setsalecost(res.data)
+      //   if (salecost.length === 0) {
          
-        } else {
-          setcostm2(res.data[0].price);
-        }
+      //   } else {
+      //     setcostm2(res.data[0].price);
+      //   }
         
-      });
+      // });
 
 
 
