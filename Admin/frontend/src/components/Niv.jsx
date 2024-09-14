@@ -28,8 +28,8 @@ function Niv(props){
           <div className="topIcon" onClick={() =>( setdata())}>
 
 
-          <  FaBell/>
-              <span className="topIconbadge"><GoPrimitiveDot/></span>
+          {/* <  FaBell/> */}
+              {/* <span className="topIconbadge"><GoPrimitiveDot/></span> */}
           </div>
           
           <div className="topIcon">

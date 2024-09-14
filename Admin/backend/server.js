@@ -3,6 +3,7 @@ const mongoose= require("mongoose");
 const bodyParser= require("body-parser");
 const cors = require("cors");
 const dotenv =require("dotenv");
+
 require("dotenv").config();
 mongoose.set('strictQuery', false);
 const app=express();
@@ -30,7 +31,7 @@ const userRouter= require("./routes/user.js");
 app.use("/user", userRouter);
 
 const coustomerRouter= require("./routes/customer.js");
-app.use("/customer", coustomerRouter);
+app.use("/customer",coustomerRouter);
 
 const orderRouter= require("./routes/order.js");
 app.use("/order", orderRouter);

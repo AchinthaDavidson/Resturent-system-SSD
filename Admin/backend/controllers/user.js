@@ -44,7 +44,7 @@ exports.userRegister = async (req, res) => {
 exports.userLogin = async (req, res) => {
     try {
         const { password, email } = req.body;
-        console.log(password)
+
         const payload = await login(email, password);
 
         res.cookie('token', payload, {
