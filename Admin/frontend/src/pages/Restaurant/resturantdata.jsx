@@ -7,12 +7,24 @@ const Resturantdata = (props) => {
   
   const id=props.id;
   const [data, setdata] = useState([]);
-  
+  const [token, setToken] = useState();
+  useEffect(() => {
+    function getproduct() {
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
+
+      if (token) {
+        setToken(token);
+      }}
+      getproduct();
+    }, []);
   useEffect(() => {
     function getItems1() {
         const url="http://localhost:8070/Inventoryfood/find/"+id;
   
-        axios.get(url).then((res) => {
+        axios.get(url,{
+          headers: {
+            Authorization: `Bearer ${token}`, // Send token in Authorization header
+          }}).then((res) => {
           console.log(res.data);
           setdata(res.data);
           // console.log(orders[1]);

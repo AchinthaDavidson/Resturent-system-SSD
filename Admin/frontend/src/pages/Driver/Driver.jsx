@@ -8,9 +8,23 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Driver = () => {
   const [driver, setdriver] = useState([]);
+  const [token, setToken] = useState();
+  useEffect(() => {
+    function getproduct() {
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
+
+      if (token) {
+        setToken(token);
+      }}
+      getproduct();
+    }, []);
   useEffect(() => {
     function getdriver() {
-      axios.get("http://localhost:8070/driver/").then((res) => {
+      const token = localStorage.getItem("authToken");
+      axios.get("http://localhost:8070/driver/",{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }}).then((res) => {
         // console.log(res.data);
         setdriver(res.data);
         // console.log(orders[1]);
@@ -25,7 +39,10 @@ const Driver = () => {
     // alert(dlte);
 
     axios
-      .delete(dlte)
+      .delete(dlte,{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }})
       .then(() => {
         toast.success("Deleted successfully");
       })

@@ -3,6 +3,7 @@ const { authGurd, validate } = require("../utils/validator");
 const { Router } = require("express");
 const { currentUser, userLogin, userRegister } = require("../controllers/user");
 const rateLimit = require('express-rate-limit');
+const { logUserAction } = require('../services/userActionLogService'); 
 
 // Rate limiting middleware for login and register routes
 const authLimiter = rateLimit({

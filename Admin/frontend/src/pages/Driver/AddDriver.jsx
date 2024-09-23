@@ -12,11 +12,23 @@ const AddDriver = () => {
   const [address , setaddress] = useState("");
   const [phone_no , setphone_no] = useState("");
   const [password , setpassword] = useState("");
+  const [token, setToken] = useState();
+  useEffect(() => {
+    function getproduct() {
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
 
+      if (token) {
+        setToken(token);
+      }}
+      getproduct();
+    }, []);
   const handleSubmit=(e)=>{
     e.preventDefault();
   const Driver = {id,name,email,address,phone_no,password};
-    axios.post("http://localhost:8070/driver/add",Driver)
+    axios.post("http://localhost:8070/driver/add",Driver,{
+      headers: {
+        Authorization: `Bearer ${token}`, // Send token in Authorization header
+      }})
     .then(()=>{
       alert("Added successfully");
       setid('')

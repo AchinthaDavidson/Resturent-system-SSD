@@ -7,9 +7,24 @@ import "./Order.css";
 
 const Order = () => {
   const [orders, setOrders] = useState([]);
+  const [token, setToken] = useState();
+  useEffect(() => {
+    function getproduct() {
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
+
+      if (token) {
+        setToken(token);
+      }}
+      getproduct();
+    }, []);
+
   useEffect(() => {
     function getorder() {
-      axios.get("http://localhost:8070/order/").then((res) => {
+      const token = localStorage.getItem("authToken");
+      axios.get("http://localhost:8070/order/",{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }}).then((res) => {
         // console.log(res.data);
         setOrders(res.data);
         // console.log(orders[1]);

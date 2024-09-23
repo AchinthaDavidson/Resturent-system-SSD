@@ -6,18 +6,31 @@ import { BsArrowUpCircle} from "react-icons/bs"
 import Resdata from "./resturantdata.jsx"
   const Restaurent = () => {
     const [items, setItems] = useState([]);
+    const [token, setToken] = useState();
+    useEffect(() => {
+      function getproduct() {
+        const token = localStorage.getItem("authToken"); // Get token from localStorage
   
+        if (token) {
+          setToken(token);
+        }}
+        getproduct();
+      }, []);
 
     useEffect(() => {
       function getItems() {
-        axios.get("http://localhost:8070/resInventory/").then((res) => {
+        const token = localStorage.getItem("authToken");
+        axios.get("http://localhost:8070/resInventory/",{
+          headers: {
+            Authorization: `Bearer ${token}`, // Send token in Authorization header
+          }}).then((res) => {
           // console.log(res.data);
           setItems(res.data);
           // console.log(orders[1]);
         });
       }
       getItems();
-    }, []);
+    }, [token]);
 
 
 function Finddata(index){

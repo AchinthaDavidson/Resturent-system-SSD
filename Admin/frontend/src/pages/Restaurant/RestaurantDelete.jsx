@@ -13,7 +13,16 @@ const RestaurantDelete = () => {
   const [cost,setcost] = useState(0);
   const [items, setItems] = useState([]);
   const [delete1] = useState([]);
-  
+  const [token, setToken] = useState();
+  useEffect(() => {
+    function getproduct() {
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
+
+      if (token) {
+        setToken(token);
+      }}
+      getproduct();
+    }, []);
 
 
     
@@ -26,7 +35,10 @@ const RestaurantDelete = () => {
           function getItems() {
             const url="http://localhost:8070/Inventoryfood/find/"+id;
 
-            axios.get(url).then((res) => {
+            axios.get(url,{
+              headers: {
+                Authorization: `Bearer ${token}`, // Send token in Authorization header
+              }}).then((res) => {
               // console.log(res.data);
               setItems(res.data);
               // console.log(orders[1]);
@@ -63,7 +75,10 @@ const RestaurantDelete = () => {
      
       const delete2="http://localhost:8070/Inventoryfood/delete/" +delete1[i]
       axios
-      .delete(delete2)
+      .delete(delete2,{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }})
       .then(() => {
         toast.success("food delete");
       })
@@ -74,7 +89,10 @@ const RestaurantDelete = () => {
 
   const Inventoryfood = {Quantity,cost};
   const url="http://localhost:8070/resInventory/update1/"+id
-axios.post(url,Inventoryfood)
+axios.post(url,Inventoryfood,{
+  headers: {
+    Authorization: `Bearer ${token}`, // Send token in Authorization header
+  }})
 .then(()=>{
   alert("data updated");
 })

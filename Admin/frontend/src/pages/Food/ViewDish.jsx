@@ -17,10 +17,23 @@ const ViewDish = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [updatedDish, setupdatedDish] = useState({});
-
+    const [token, setToken] = useState();
+    useEffect(() => {
+        function getproduct() {
+          const token = localStorage.getItem("authToken"); // Get token from localStorage
+    
+          if (token) {
+            setToken(token);
+          }}
+          getproduct();
+        }, []);
     useEffect(() =>{
+        const token = localStorage.getItem("authToken");
         axios
-        .get("http://localhost:8070/food/viewDish")
+        .get("http://localhost:8070/food/viewDish",{
+            headers: {
+              Authorization: `Bearer ${token}`, // Send token in Authorization header
+            }})
         .then((res) => {
            // console.log(res.data);
             setDishes(res.data);
@@ -29,8 +42,11 @@ const ViewDish = () => {
     }, []);
 
     const deleteDish = (id) => {
-
-      axios.delete(`http://localhost:8070/food/delete/${id}`)
+        const token = localStorage.getItem("authToken");
+      axios.delete(`http://localhost:8070/food/delete/${id}`,{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }})
         .then((res)=> console.log(res))
         .catch((err) => console.log(err));
        
@@ -57,7 +73,10 @@ const ViewDish = () => {
 
     const saveUpdatedDish = () => {
        // console.log(updatedPost);
-        axios.put(`http://localhost:8070/food/update/${updatedDish._id}` , updatedDish)
+        axios.put(`http://localhost:8070/food/update/${updatedDish._id}` , updatedDish,{
+            headers: {
+              Authorization: `Bearer ${token}`, // Send token in Authorization header
+            }})
             .then((res) => console.log(res))
             .catch((err) => console.log(err));
         handleClose();

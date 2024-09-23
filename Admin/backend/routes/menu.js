@@ -1,7 +1,8 @@
 const router = require('express').Router();
 let Menu = require('../models/menu');
 const rateLimit = require('express-rate-limit');
-
+const { authGurd } = require("../utils/validator");
+const { logUserAction } = require('../services/userActionLogService'); 
 // Rate limiting middleware
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -11,7 +12,7 @@ const apiLimiter = rateLimit({
 
 // Apply rate limiter to all routes
 router.use(apiLimiter);
-
+router.use(authGurd)
 /*add*/
 router.route("/add").post((req,res)=>{
 
@@ -27,7 +28,9 @@ router.route("/add").post((req,res)=>{
         Name,                      
     })
 
-    newMenu.save().then(()=>{
+    newMenu.save().then(async ()=>{
+        const authToken = req.headers['authorization'].split('Bearer ')[1];
+        await logUserAction(authToken, 'Added new menu');
         res.json("Product added");
     }).catch((err)=>{
         console.log(err);
@@ -74,7 +77,9 @@ router.route("/delete/:id").delete(async(req,res)=>{
     
     let Id = req.params.id;
 
-    await Menu.deleteOne({category_Id:req.params.id}).then(()=>{
+    await Menu.deleteOne({category_Id:req.params.id}).then(async ()=>{
+        const authToken = req.headers['authorization'].split('Bearer ')[1];
+        await logUserAction(authToken, 'delete menu');
         res.status(200).send({status:"Menu details deleted", user : Id})
     }).catch((err)=>{
         console.log(err);

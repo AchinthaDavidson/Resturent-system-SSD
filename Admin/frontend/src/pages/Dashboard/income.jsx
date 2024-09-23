@@ -21,7 +21,16 @@ const [costd2, setcostd2] = useState(0)
 const d=new Date()
 const day=  d.getDate() +"-" +(d.getMonth() + 1) +"-" +d.getFullYear()
 const month= (d.getMonth() + 1) +"-" +d.getFullYear()
+const [token, setToken] = useState();
+useEffect(() => {
+  function getproduct() {
+    const token = localStorage.getItem("authToken"); // Get token from localStorage
 
+    if (token) {
+      setToken(token);
+    }}
+    getproduct();
+  }, []);
 
 const [url,setUrl] =useState("http://localhost:8070/order/sum/"+day)
 const [url1,setUrl1] =useState("http://localhost:8070/Inventoryfood/sum/"+day)
@@ -30,7 +39,10 @@ const [url3,setUrl3] =useState("http://localhost:8070/Inventoryfood/sum/"+month)
 const [url4,setUrl4] =useState("http://localhost:8070/Bardata/sum/"+day)
 const [url5,setUrl5] =useState("http://localhost:8070/Bardata/sum/"+month)
 
-      // axios.get(url).then((res) => {
+      // axios.get(url,{
+      // headers: {
+      //   Authorization: `Bearer ${token}`, // Send token in Authorization header
+      // }}).then((res) => {
       //   setsalesrate(res.data);
       //   if (salesrate.length === 0) {
          
@@ -39,7 +51,10 @@ const [url5,setUrl5] =useState("http://localhost:8070/Bardata/sum/"+month)
       //   }
       // });
 
-      // axios.get(url1).then((res) => {
+      // axios.get(url1,{
+      // headers: {
+      //   Authorization: `Bearer ${token}`, // Send token in Authorization header
+      // }}).then((res) => {
       //   setsalecost(res.data)
       //   if (salecost.length === 0) {
           
@@ -48,7 +63,10 @@ const [url5,setUrl5] =useState("http://localhost:8070/Bardata/sum/"+month)
       //   }
         
       // });
-      // axios.get(url2).then((res) => {
+      // axios.get(url2,{
+      // headers: {
+      //   Authorization: `Bearer ${token}`, // Send token in Authorization header
+      // }}).then((res) => {
       //   setsalesrate(res.data);
       //   if (salesrate.length === 0) {
          
@@ -57,7 +75,10 @@ const [url5,setUrl5] =useState("http://localhost:8070/Bardata/sum/"+month)
       //   }
       // });
   
-      // axios.get(url3).then((res) => {
+      // axios.get(url3,{
+      // headers: {
+      //   Authorization: `Bearer ${token}`, // Send token in Authorization header
+      // }}).then((res) => {
       //   setsalecost(res.data)
       //   if (salecost.length === 0) {
          
@@ -66,7 +87,10 @@ const [url5,setUrl5] =useState("http://localhost:8070/Bardata/sum/"+month)
       //   }
         
       // });
-      // axios.get(url4).then((res) => {
+      // axios.get(url4,{
+      // headers: {
+      //   Authorization: `Bearer ${token}`, // Send token in Authorization header
+      // }}).then((res) => {
       //   setsalecost(res.data)
       //   if (salecost.length === 0) {
          
@@ -76,7 +100,10 @@ const [url5,setUrl5] =useState("http://localhost:8070/Bardata/sum/"+month)
         
       // });
   
-      // axios.get(url5).then((res) => {
+      // axios.get(url5,{
+      // headers: {
+      //   Authorization: `Bearer ${token}`, // Send token in Authorization header
+      // }}).then((res) => {
       //   setsalecost(res.data)
       //   if (salecost.length === 0) {
          

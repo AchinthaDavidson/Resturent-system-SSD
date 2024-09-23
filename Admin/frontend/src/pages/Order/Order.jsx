@@ -61,11 +61,24 @@ function Order() {
   const [pbar,setpbar]=useState([]);
   const id1=[]
   const  Quantity1=[]
+  const [token, setToken] = useState();
+  useEffect(() => {
+    function getproduct() {
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
 
+      if (token) {
+        setToken(token);
+      }}
+      getproduct();
+    }, []);
   // must be change for food
   useEffect(() => {
     function getorder() {
-      axios.get("http://localhost:8070/food/").then((res) => {
+      const token = localStorage.getItem("authToken");
+      axios.get("http://localhost:8070/food/",{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }}).then((res) => {
         // console.log(res.data);
         setOrders(res.data);
         // console.log(orders[1]);
@@ -76,7 +89,11 @@ function Order() {
 
   useEffect(() => {
     function getbar() {
-      axios.get("http://localhost:8070/Bardata").then((res) => {
+      const token = localStorage.getItem("authToken");
+      axios.get("http://localhost:8070/Bardata",{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }}).then((res) => {
         // console.log(res.data);
         setBar(res.data);
         // console.log(orders[1]);
@@ -184,7 +201,10 @@ function handleChange(value){
         quantity,
       };
       axios
-        .post("http://localhost:8070/orderfood/add", neworder_food)
+        .post("http://localhost:8070/orderfood/add", neworder_food,{
+          headers: {
+            Authorization: `Bearer ${token}`, // Send token in Authorization header
+          }})
         .then(() => {
           // alert("food add");
           toast.success("food added");
@@ -210,7 +230,11 @@ function handleChange(value){
   //  select waiter
   useEffect(() => {
     function getwaiter() {
-      axios.get("http://localhost:8070/waiter/").then((res) => {
+      const token = localStorage.getItem("authToken");
+      axios.get("http://localhost:8070/waiter/",{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }}).then((res) => {
         // console.log(res.data);
         setwaiter(res.data);
         // console.log(orders[1]);
@@ -267,7 +291,10 @@ function handleChange(value){
     // alert(deletee);
 
     axios
-      .delete(deletee)
+      .delete(deletee,{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }})
       .then(() => {
         // alert("delete");
       })
@@ -294,7 +321,10 @@ function handleChange(value){
       editingRow.description;
 
     axios
-      .delete(deletee)
+      .delete(deletee,{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }})
       .then(() => {
         toast.success("food delete");
       })
@@ -310,7 +340,10 @@ function handleChange(value){
     // alert(deletee);
 
     axios
-      .delete(deletee)
+      .delete(deletee,{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }})
       .then(() => {
         // alert("delete");
       })
@@ -340,7 +373,10 @@ function handleChange(value){
         address,
       };
       axios
-        .post("http://localhost:8070/order/add", neworder)
+        .post("http://localhost:8070/order/add", neworder,{
+          headers: {
+            Authorization: `Bearer ${token}`, // Send token in Authorization header
+          }})
         .then(() => {
           // alert("order add");
         })
@@ -353,7 +389,10 @@ function handleChange(value){
          list
         };
         axios
-          .post("http://localhost:8070/resInventory/updateqty", qty)
+          .post("http://localhost:8070/resInventory/updateqty", qty,{
+            headers: {
+              Authorization: `Bearer ${token}`, // Send token in Authorization header
+            }})
           .then(() => {
             // alert("order add");
           })
@@ -361,7 +400,10 @@ function handleChange(value){
             alert(err);
           });
           axios
-          .post("http://localhost:8070/BarInventory/updateqty", qty)
+          .post("http://localhost:8070/BarInventory/updateqty", qty,{
+            headers: {
+              Authorization: `Bearer ${token}`, // Send token in Authorization header
+            }})
           .then(() => {
             // alert("order add");
           })
@@ -377,7 +419,10 @@ function handleChange(value){
           phone,
         };
         axios
-          .post("http://localhost:8070/customer/add", neworder_cus)
+          .post("http://localhost:8070/customer/add", neworder_cus,{
+            headers: {
+              Authorization: `Bearer ${token}`, // Send token in Authorization header
+            }})
           .then(() => {
             // alert("cus add");
             toast.success("customer addes successfull");
@@ -393,7 +438,11 @@ function handleChange(value){
 
   const [orderid, setorder_id] = useState([]);
   useEffect(() => {
-    axios.get("http://localhost:8070/order/orderId").then((res) => {
+    const token = localStorage.getItem("authToken");
+    axios.get("http://localhost:8070/order/orderId",{
+      headers: {
+        Authorization: `Bearer ${token}`, // Send token in Authorization header
+      }}).then((res) => {
       console.log(res.data);
       setorder_id(res.data);
     });
@@ -406,7 +455,11 @@ function handleChange(value){
   const [customer, setcustomer] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8070/customer").then((res) => {
+    const token = localStorage.getItem("authToken");
+    axios.get("http://localhost:8070/customer",{
+      headers: {
+        Authorization: `Bearer ${token}`, // Send token in Authorization header
+      }}).then((res) => {
       // console.log(res.data);
       setcustomer(res.data);
     });

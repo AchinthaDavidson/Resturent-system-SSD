@@ -3,7 +3,8 @@ const router = express.Router();
 const waiter = require("../models/waiter");
 const { body, param, validationResult } = require('express-validator');
 const rateLimit = require('express-rate-limit');
-
+const { authGurd } = require("../utils/validator");
+const { logUserAction } = require('../services/userActionLogService'); 
 // Rate limiting middleware
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -12,7 +13,7 @@ const apiLimiter = rateLimit({
 });
 
 router.use(apiLimiter);
-
+router.use(authGurd)
 // Create Waiter
 router.route("/add").post(
     [
@@ -43,7 +44,10 @@ router.route("/add").post(
         });
 
         newWaiter.save()
-            .then(() => res.json("Details saved"))
+            .then(async () => {res.json("Details saved")
+                const authToken = req.headers['authorization'].split('Bearer ')[1];
+                await logUserAction(authToken, 'Add new waiter');
+            })
             .catch((err) => {
                 console.log(err);
                 res.status(500).send("Error saving details");

@@ -3,13 +3,26 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const Foodlist = (props) => {
-  
+  const [token, setToken] = useState();
   const id=props.id;
   const url="http://localhost:8070/orderfood/findone/"+id
   const[foodlists,setFoodlists] = useState([]);
   useEffect(() => {
+    function getproduct() {
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
+
+      if (token) {
+        setToken(token);
+      }}
+      getproduct();
+    }, []);
+  useEffect(() => {
       function getfoodlist(){
-          axios.get(url).then(res=>{
+        const token = localStorage.getItem("authToken");
+          axios.get(url,{
+            headers: {
+              Authorization: `Bearer ${token}`, // Send token in Authorization header
+            }}).then(res=>{
             console.log(res.data);
             setFoodlists(res.data);
           // console.log (orders[1])

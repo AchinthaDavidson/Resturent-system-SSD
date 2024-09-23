@@ -7,9 +7,24 @@ import { MdInventory} from "react-icons/md"
 const Customer = () => {
     const [ressum, setRessum] = useState();
     const [barsum, setbarsum] = useState();
+    const [token, setToken] = useState();
+    useEffect(() => {
+      function getproduct() {
+        const token = localStorage.getItem("authToken"); // Get token from localStorage
+  
+        if (token) {
+          setToken(token);
+        }}
+        getproduct();
+      }, []);
   useEffect(() => {
-    function getcount() {
-      axios.get("http://localhost:8070/resInventory/sum").then((res) => {
+    async function getcount() {
+      const token =await localStorage.getItem("authToken");
+      
+      axios.get("http://localhost:8070/resInventory/sum",{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }}).then((res) => {
         // console.log(res.data);
         setRessum(res.data[0].price);
         // console.log(orders[1]);
@@ -19,8 +34,13 @@ const Customer = () => {
   }, []);
 
   useEffect(() => {
-    function getcount() {
-      axios.get("http://localhost:8070/BarInventory/sum").then((res) => {
+    async function getcount() {
+
+      const token =await localStorage.getItem("authToken");
+      axios.get("http://localhost:8070/BarInventory/sum",{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }}).then((res) => {
         // console.log(res.data);
         setbarsum(res.data[0].price);
         // console.log(orders[1]);
