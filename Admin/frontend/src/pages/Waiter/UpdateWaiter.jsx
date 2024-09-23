@@ -17,16 +17,27 @@ const UpdateWaiter = () => {
     const [password , setPassword] = useState("");
     const [status , setStatus] = useState("");
     const history = useNavigate();
-   
+    const [token, setToken] = useState();
     
    const{id} = useParams();
    
-    
+   useEffect(() => {
+    function getproduct() {
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
+
+      if (token) {
+        setToken(token);
+      }}
+      getproduct();
+    }, []);
 
     /* */
    
    useEffect(()=>{
-    axios.get(`http://localhost:8070/waiter/${id} `).then((res)=>{
+    axios.get(`http://localhost:8070/waiter/${id} `,{
+      headers: {
+        Authorization: `Bearer ${token}`, // Send token in Authorization header
+      }}).then((res)=>{
       setWid(res.data.W_Id)
       setName(res.data.name)
       setEmail(res.data.Email)
@@ -44,7 +55,10 @@ const UpdateWaiter = () => {
   
   function Update(e){
       e.preventDefault()
-      axios.put(`http://localhost:8070/waiter/update/${id} ` ,waiter ).then(()=>{
+      axios.put(`http://localhost:8070/waiter/update/${id} ` ,waiter ,{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }}).then(()=>{
 
       history('/waiter')
       })

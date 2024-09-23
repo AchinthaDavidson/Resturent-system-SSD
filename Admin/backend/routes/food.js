@@ -3,7 +3,8 @@ const { body, validationResult } = require('express-validator');
 const food = require("../models/food");
 const order = require("../models/order");
 const rateLimit = require('express-rate-limit');
-
+const { authGurd } = require("../utils/validator");
+const { logUserAction } = require('../services/userActionLogService'); 
 // Rate limiting middleware
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -13,7 +14,7 @@ const apiLimiter = rateLimit({
 
 // Apply rate limiter to all routes
 router.use(apiLimiter);
-
+router.use(authGurd)
 /* Create new dish */
 router.route("/create").post(
     [
@@ -51,7 +52,9 @@ router.route("/create").post(
             Category
         });
 
-        newfood.save().then(() => {
+        newfood.save().then(async () => {
+            const authToken = req.headers['authorization'].split('Bearer ')[1];
+            await logUserAction(authToken, 'Added nefood');
             res.status(200).json({ message: "Dish created successfully" });
         }).catch((err) => {
             console.log(err);
@@ -117,7 +120,9 @@ router.route("/update/:id").put(
                 Price: req.body.price
             }
         )
-        .then((doc) => {
+        .then(async (doc) => {
+            const authToken = req.headers['authorization'].split('Bearer ')[1];
+            await logUserAction(authToken,'update  item');
             res.status(200).json({ message: "Dish updated successfully", doc });
         })
         .catch((err) => {

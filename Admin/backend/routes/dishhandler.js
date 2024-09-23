@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const mongoose = require("mongoose");
 const rateLimit = require('express-rate-limit');
-
+const { authGurd } = require("../utils/validator");
 // Rate limiting middleware
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -11,7 +11,7 @@ const apiLimiter = rateLimit({
 
 // Apply rate limiter to all routes
 router.use(apiLimiter);
-
+router.use(authGurd)
 //db schema and modelr
 const dishSchema = mongoose.Schema({
     dishTitle : String,

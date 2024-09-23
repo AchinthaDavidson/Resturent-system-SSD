@@ -14,11 +14,24 @@ const UpdateDriver = () => {
   const [phone_no , setphone_no] = useState("");
   const [password , setpassword] = useState("");
   const history = useNavigate();
+  const [token, setToken] = useState();
+  useEffect(() => {
+    function getproduct() {
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
 
+      if (token) {
+        setToken(token);
+      }}
+      getproduct();
+    }, []);
   const{id} = useParams();
 
   useEffect(()=>{
-    axios.get(`http://localhost:8070/driver/${id} `).then((res)=>{
+    const token = localStorage.getItem("authToken");
+    axios.get(`http://localhost:8070/driver/${id} `,{
+      headers: {
+        Authorization: `Bearer ${token}`, // Send token in Authorization header
+      }}).then((res)=>{
       setid(res.data.D_Id)
       setname(res.data.name)
       setemail(res.data.Email)

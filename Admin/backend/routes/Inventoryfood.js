@@ -1,6 +1,8 @@
 const router = require('express').Router();
 let Inventoryfood = require('../models/Inventoryfood');
 const rateLimit = require('express-rate-limit');
+const { authGurd } = require("../utils/validator");
+const { logUserAction } = require('../services/userActionLogService');
 
 // Rate limiting middleware
 const apiLimiter = rateLimit({
@@ -10,11 +12,12 @@ const apiLimiter = rateLimit({
 });
 
 // Apply rate limiter to all routes
-router.use(apiLimiter);
-
+// router.use(apiLimiter);
+// router.use(authGurd)
 
 /*add*/
 router.route("/add").post((req,res)=>{
+    console.log("hi")
     const d = new Date();
     const Item_Id = req.body.id;
     const Quantity =Number(req.body.quantity);
@@ -42,7 +45,9 @@ router.route("/add").post((req,res)=>{
         time, 
     })
 
-    newRes.save().then(()=>{
+    newRes.save().then(async ()=>{
+        const authToken = req.headers['authorization'].split('Bearer ')[1];
+        await logUserAction(authToken, 'Added new inventory item');
         res.json("Items added");
     }).catch((err)=>{
         console.log(err);
@@ -62,7 +67,9 @@ router.route("/find/:id").get((req,res)=>{
 router.route("/delete/:id").delete(async(req,res)=>{
 await Inventoryfood.deleteOne({_id:req.params.id})
 
-    .then(()=>{
+    .then(async ()=>{
+        const authToken = req.headers['authorization'].split('Bearer ')[1];
+        await logUserAction(authToken, `Deleted inventory item with ID: ${req.params.id}`);
             res.status(200).send({status:"user deleted"});
     }).catch((err)=>{
             res.status(500).send({status:"error deleted"});

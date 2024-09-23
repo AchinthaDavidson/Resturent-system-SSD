@@ -22,12 +22,23 @@ const RestaurantAdd = () => {
   const [Total,setTotal] = useState("");
   const [level,setlevel]=useState("");
   const [isEditing, setIsEditing] = useState(false);
-  
-
+  const [token, setToken] = useState();
+  useEffect(() => {
+    function getproduct() {
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
+console.log(token)
+      if (token) {
+        setToken(token);
+      }}
+      getproduct();
+    }, [token]);
   const show = ()=>{
-
+    const token = localStorage.getItem("authToken");
     const Inventoryfood = {id,quantity,unitPrice,supplier,expiredate};
-    axios.post("http://localhost:8070/Inventoryfood/add",Inventoryfood)
+    axios.post("http://localhost:8070/Inventoryfood/add",Inventoryfood,{
+      headers: {
+        Authorization: `Bearer ${token}`, // Send token in Authorization header
+      }})
     .then(()=>{
       alert("data added inventoryfood");
     })
@@ -40,7 +51,10 @@ const RestaurantAdd = () => {
      const newres_add = {
        id,name,quantity,totalCost,reorderlevel,unit
      };
-     axios.post("http://localhost:8070/resInventory/add",newres_add)
+     axios.post("http://localhost:8070/resInventory/add",newres_add,{
+      headers: {
+        Authorization: `Bearer ${token}`, // Send token in Authorization header
+      }})
      .then(()=>{
       alert("data added successfully");
      })
@@ -53,7 +67,10 @@ const RestaurantAdd = () => {
     var totalCost1=(Number(Total))+totalCost
       const Inventoryfood = {name,qty,totalCost1,reorderlevel,unit};
       const url="http://localhost:8070/resInventory/update/" + Item_Id1
-    axios.put(url,Inventoryfood)
+    axios.put(url,Inventoryfood,{
+      headers: {
+        Authorization: `Bearer ${token}`, // Send token in Authorization header
+      }})
     .then(()=>{
       alert("data updated");
     })
@@ -66,7 +83,11 @@ const RestaurantAdd = () => {
 const [items, setItems] = useState([]);
     useEffect(() => {
       function getItems() {
-        axios.get("http://localhost:8070/resInventory/").then((res) => {
+        
+        axios.get("http://localhost:8070/resInventory/",{
+      headers: {
+        Authorization: `Bearer ${token}`, // Send token in Authorization header
+      }}).then((res) => {
           // console.log(res.data);
           setItems(res.data);
           // console.log(orders[1]);

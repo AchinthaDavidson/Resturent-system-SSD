@@ -5,11 +5,23 @@ import axios from "axios";
 const Bardata = (props) => {
     const id = props.id;
     const [data,setdata1] = useState([]);
+    const [token, setToken] = useState();
+
     useEffect(()=>{
         function getItems1(){
+          const token = localStorage.getItem("authToken"); // Get token from localStorage
+
+          if (token) {
+            setToken(token);
+          }
+    
             const url="http://localhost:8070/bardata/find/"+id;
 
-            axios.get(url).then((res)=>{
+            axios.get(url, {
+              headers: {
+                Authorization: `Bearer ${token}`, // Send token in Authorization header
+              },
+            }).then((res)=>{
                 //console.log(res.data);
                 setdata1(res.data);
             });

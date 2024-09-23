@@ -5,7 +5,8 @@ let food=require('../models/food');
 const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');  
 const { body, validationResult } = require('express-validator');
-
+const { authGurd } = require("../utils/validator");
+const { logUserAction } = require('../services/userActionLogService'); 
 // Rate limiting middleware
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -15,7 +16,7 @@ const apiLimiter = rateLimit({
 
 // Apply rate limiter to all routes
 router.use(apiLimiter);
-
+router.use(authGurd)
 function isValidObjectId(id) {
     return mongoose.Types.ObjectId.isValid(id);
 }
@@ -44,7 +45,9 @@ router.route("/add").post((req,res)=>{
         unit
     })
 
-    newRes.save().then(()=>{
+    newRes.save().then(async ()=>{
+        const authToken = req.headers['authorization'].split('Bearer ')[1];
+        await logUserAction(authToken, 'Added new inventory item');
         res.json("Items added");
     }).catch((err)=>{
         console.log(err);
@@ -132,13 +135,14 @@ router.route("/update1/:id").post(async(req,res)=>{
     const Quantity =req.body.Quantity;
     const Total_Cost = req.body.cost;
     
-     Restaurant.find({Item_Id:req.params.id}).then((Restaurant)=>{
+     Restaurant.find({Item_Id:req.params.id}).then(async (Restaurant)=>{
         var  Quantity1 =Restaurant[0].Quantity
         var cost1 =Restaurant[0].Total_Cost
 
         update2(Quantity1,cost1)
         console.log(Restaurant)
-        
+        const authToken = req.headers['authorization'].split('Bearer ')[1];
+        await logUserAction(authToken, 'Added new inventory item');
     }).catch((err)=>{
         console.log(err)
     })

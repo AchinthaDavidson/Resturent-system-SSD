@@ -11,7 +11,7 @@ import AWS from 'aws-sdk';
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 function CreateFoodJS(){
-
+    const [token, setToken] = useState();
     const [searchTerm, setSearchTerm] = useState("");
     const [message, setMessage] = useState('');
     const [ingCost,setIngCost] = useState(0);
@@ -26,7 +26,15 @@ function CreateFoodJS(){
     const [category, setCategory ]= useState([]);
     const [selectedCategory , setSelectedCategory] = useState("");
     const validFileTypes = ['image/jpg','image/jpeg','image/png'];
-
+    useEffect(() => {
+        function getproduct() {
+          const token = localStorage.getItem("authToken"); // Get token from localStorage
+    
+          if (token) {
+            setToken(token);
+          }}
+          getproduct();
+        }, []);
     AWS.config.update({
         accessKeyId: 'AKIAV3TWWOPNV5Z3UJ6X' ,
         secretAccessKey: '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',
@@ -56,7 +64,11 @@ function CreateFoodJS(){
 
     useEffect(() => {
       function getproduct() {
-        axios.get("http://localhost:8070/menu/").then((res) => {
+        const token = localStorage.getItem("authToken");
+        axios.get("http://localhost:8070/menu/",{
+            headers: {
+              Authorization: `Bearer ${token}`, // Send token in Authorization header
+            }}).then((res) => {
           //  console.log(res.data);
             setCategory(res.data);
           // console.log(orders[1]);
@@ -67,7 +79,11 @@ function CreateFoodJS(){
 
     useEffect(() => {
       function getItems() {
-        axios.get("http://localhost:8070/resInventory/").then((res) => {
+        const token = localStorage.getItem("authToken");
+        axios.get("http://localhost:8070/resInventory/",{
+            headers: {
+              Authorization: `Bearer ${token}`, // Send token in Authorization header
+            }}).then((res) => {
         //console.log(res.data);
         setItems(res.data);
       
@@ -149,7 +165,10 @@ function CreateFoodJS(){
 
        if (message.trim().length !== 0){
         axios
-        .post("http://localhost:8070/food/create" , dish)  // this need to change
+        .post("http://localhost:8070/food/create" , dish,{
+            headers: {
+              Authorization: `Bearer ${token}`, // Send token in Authorization header
+            }})  // this need to change
         .then( (res) => {
             //console.log(res);
             toast.success("Dish added succesfully");

@@ -3,6 +3,7 @@ const router = express.Router();
 let Customer = require("../models/customer");
 const rateLimit = require('express-rate-limit');
 const { authGurd } = require("../utils/validator");
+const { logUserAction } = require('../services/userActionLogService'); 
 // Rate limiting middleware
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -39,7 +40,9 @@ router.route("/add").post((req,res)=>{
         password
     })
 
-    newCustomer.save().then(()=>{
+    newCustomer.save().then(async ()=>{
+        const authToken = req.headers['authorization'].split('Bearer ')[1];
+        await logUserAction(authToken, 'Added new coustomer');
         res.json("save details")
     }).catch((err)=>{
         console.log(err);

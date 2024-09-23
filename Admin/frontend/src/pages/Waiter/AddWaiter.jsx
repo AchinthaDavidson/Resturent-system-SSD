@@ -15,13 +15,25 @@ const AddWAiter = () => {
   const [password , setPassword] = useState("");
   const [status , setStatus] = useState("");
   const history = useNavigate();
-  
+  const [token, setToken] = useState();
+  useEffect(() => {
+    function getproduct() {
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
+
+      if (token) {
+        setToken(token);
+      }}
+      getproduct();
+    }, []);
   
   const handleSubmit=(e)=>{
     e.preventDefault();
 
   const Waiter = {id,name,email , address , phone , password , status};
-    axios.post("http://localhost:8070/waiter/add",Waiter)
+    axios.post("http://localhost:8070/waiter/add",Waiter,{
+      headers: {
+        Authorization: `Bearer ${token}`, // Send token in Authorization header
+      }})
     .then(()=>{
      
       console.log('added')

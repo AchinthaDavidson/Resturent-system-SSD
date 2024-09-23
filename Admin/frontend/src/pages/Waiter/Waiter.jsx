@@ -9,12 +9,23 @@ const Waiter = () => {
 
     const [waiter , setWaiter] = useState([]) ;
     //const history = useNavigate();
-   
-
+    const [token, setToken] = useState();
+    useEffect(() => {
+        function getproduct() {
+          const token = localStorage.getItem("authToken"); // Get token from localStorage
+    
+          if (token) {
+            setToken(token);
+          }}
+          getproduct();
+        }, []);
     useEffect(() => {
         function getWaiter() {
-
-            axios.get("http://localhost:8070/waiter/").then((res) =>{
+          const token = localStorage.getItem("authToken");
+            axios.get("http://localhost:8070/waiter/",{
+                headers: {
+                  Authorization: `Bearer ${token}`, // Send token in Authorization header
+                }}).then((res) =>{
                 setWaiter(res.data)
             });
 
@@ -28,7 +39,10 @@ const Waiter = () => {
 
         const dlt = "http://localhost:8070/waiter/delete/" + id ;
 
-        axios.delete(dlt).then(()=>{
+        axios.delete(dlt,{
+            headers: {
+              Authorization: `Bearer ${token}`, // Send token in Authorization header
+            }}).then(()=>{
             alert('Deleted Successfully!');
            
             //history('/Waiter/addwaiter')

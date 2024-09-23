@@ -6,11 +6,24 @@ import {BsEnvelope, BsPlusLg} from 'react-icons/bs';
 import axios from "axios";
 
 const QandA = () => {
-
+  const [token, setToken] = useState();
     const [faq, setFaq] = useState([]);
     useEffect(() => {
+      function getproduct() {
+        const token = localStorage.getItem("authToken"); // Get token from localStorage
+  
+        if (token) {
+          setToken(token);
+        }}
+        getproduct();
+      }, []);
+    useEffect(() => {
     function getFaq() {
-      axios.get("http://localhost:8070/faq/").then((res) => {
+      const token = localStorage.getItem("authToken");
+      axios.get("http://localhost:8070/faq/",{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }}).then((res) => {
         setFaq(res.data);
       }).catch((err) =>{
         alert(err);
@@ -26,7 +39,10 @@ const QandA = () => {
   const handleSubmit=(e)=>{
     e.preventDefault();
   const faq = {category,question, answer};
-  axios.post("http://localhost:8070/faq/add/", faq).then(()=>{
+  axios.post("http://localhost:8070/faq/add/", faq,{
+    headers: {
+      Authorization: `Bearer ${token}`, // Send token in Authorization header
+    }}).then(()=>{
       alert("New FAQ added!");
       window.location.reload(false);
       setcategory('')
@@ -40,7 +56,10 @@ const QandA = () => {
     function deleteFaq(_id){
       const del = "http://localhost:8070/faq/delete/" + _id ;
   
-      axios.delete(del).then(() => {
+      axios.delete(del,{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }}).then(() => {
           alert("FAQ Deleted");
           window.location.reload(false);
       }).catch(err => {

@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const barInv = require('../models/barinventory_data');
 const rateLimit = require('express-rate-limit');
-
+const { authGurd } = require("../utils/validator");
+const { logUserAction } = require('../services/userActionLogService'); 
 // Rate limiting middleware
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -11,7 +12,7 @@ const apiLimiter = rateLimit({
 
 // Apply rate limiter to all routes
 router.use(apiLimiter);
-
+router.use(authGurd)
 /* add */
 router.route("/add").post((req,res)=>{
     const d = new Date();
@@ -40,7 +41,9 @@ router.route("/add").post((req,res)=>{
         time
     })
 
-    newbar.save().then(()=>{
+    newbar.save().then(async ()=>{
+        const authToken = req.headers['authorization'].split('Bearer ')[1];
+        await logUserAction(authToken, 'Added new bar data');
         res.json("Bottle added");
     }).catch((err)=>{
         console.log(err);
@@ -67,7 +70,9 @@ router.route("/find/:id").get((req,res)=>{
 
 router.route("/delete/:id").delete(async(req,res)=>{
     await barInv.deleteOne({_id:req.params.id})
-    .then(()=>{
+    .then(async ()=>{
+        const authToken = req.headers['authorization'].split('Bearer ')[1];
+        await logUserAction(authToken, 'Delete bar data');
         res.status(200).send({status:"bar inventory_data deleted"})
     }).catch((err)=>{
         console.log(err);

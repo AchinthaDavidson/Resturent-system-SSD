@@ -3,7 +3,8 @@ const order = require("../models/order");
 // const Coustomer = require("../models/coustomer");
 let Coustomer =require("../models/order");
 const rateLimit = require('express-rate-limit');
-
+const { authGurd } = require("../utils/validator");
+const { logUserAction } = require('../services/userActionLogService'); 
 // Rate limiting middleware
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -13,6 +14,7 @@ const apiLimiter = rateLimit({
 
 // Apply rate limiter to all routes
 router.use(apiLimiter);
+router.use(authGurd)
 const d=new Date();
 
 // ADD coustomer
@@ -52,7 +54,9 @@ router.route("/add").post((req,res)=>{
         location
     })
     console.log(neworder)
-    neworder.save().then(()=>{
+    neworder.save().then(async ()=>{
+        const authToken = req.headers['authorization'].split('Bearer ')[1];
+        await logUserAction(authToken, 'Added new inventory item');
         res.json("save details")
     }).catch((err)=>{
         console.log(err);
@@ -98,7 +102,9 @@ router.route("/delete/:id").delete(async(req,res)=>{
     
     let Id = req.params.id;
 
-    await order.deleteOne({category_Id:req.params.id}).then(()=>{
+    await order.deleteOne({category_Id:req.params.id}).then(async ()=>{
+        const authToken = req.headers['authorization'].split('Bearer ')[1];
+        await logUserAction(authToken, 'Delete inventory item');
         res.status(200).send({status:"order details deleted", user : Id})
     }).catch((err)=>{
         console.log(err);
@@ -120,7 +126,10 @@ router.route("/update/:id").put(async(req,res)=>{
     const updatemenu = {Name};  
 
     await order.updateOne({_Id:Id},{$set:updatemenu})
-    .then(()=>{
+    .then(async ()=>{
+        
+        const authToken = req.headers['authorization'].split('Bearer ')[1];
+        await logUserAction(authToken, 'Added new inventory item');
         res.status(200).send({status:"order updated"})
     }).catch((err)=>{
         console.log(err);

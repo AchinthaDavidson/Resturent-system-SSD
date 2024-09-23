@@ -3,7 +3,8 @@ const router = express.Router();
 const driver = require("../models/driver");
 const { body, param, validationResult } = require('express-validator');
 const rateLimit = require('express-rate-limit');
-
+const { authGurd } = require("../utils/validator");
+const { logUserAction } = require('../services/userActionLogService'); 
 // Rate limiting middleware
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -12,7 +13,7 @@ const apiLimiter = rateLimit({
 });
 
 router.use(apiLimiter);
-
+router.use(authGurd)
 // Create Driver
 router.route("/add").post(
     [
@@ -41,7 +42,10 @@ router.route("/add").post(
         });
 
         newDriver.save()
-            .then(() => res.json("Details saved"))
+            .then(async () => {
+                const authToken = req.headers['authorization'].split('Bearer ')[1];
+            await logUserAction(authToken, 'Added new  driver');
+                res.json("Details saved")})
             .catch((err) => {
                 console.log(err);
                 res.status(500).send("Error saving details");
@@ -94,6 +98,8 @@ router.put("/update/:id",
 
             // Save the updated document
             await driverItem.save();
+            const authToken = req.headers['authorization'].split('Bearer ')[1];
+            await logUserAction(authToken, 'Update');
             res.status(200).send({ status: "Driver updated" });
         } catch (err) {
             console.log(err);
@@ -117,6 +123,8 @@ router.delete('/delete/:id',
 
         try {
             await driver.findByIdAndDelete(userID);
+            const authToken = req.headers['authorization'].split('Bearer ')[1];
+            await logUserAction(authToken, 'Delete');
             res.status(200).send({ status: "Driver deleted" });
         } catch (err) {
             console.log(err);

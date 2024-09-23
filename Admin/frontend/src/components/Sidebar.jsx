@@ -27,7 +27,7 @@ const Sidebar = ({children}) => {
     
           if (!token) {
           
-            setTimeout(() => navigate('/login'), 2000); // Redirect to login
+            setTimeout(() => navigate('/'), 2000); // Redirect to login
             return;
           }
     
@@ -44,7 +44,7 @@ const Sidebar = ({children}) => {
             // Handle invalid token or other errors
             console.error('Token validation error:', err);
           
-            setTimeout(() => navigate('/login'), 2000); // Redirect to login after 2 seconds
+            setTimeout(() => navigate('/'), 2000); // Redirect to login after 2 seconds
           }
         };
     

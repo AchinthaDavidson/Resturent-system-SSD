@@ -73,14 +73,26 @@ function BarAdd() {
   const[Re_Order_Level1, setRe_Order_Level1] = useState("");
   // const[Stock,setstock]=useState("");
   const[isEditing, setIsEditing] = useState(false);
+  const [token, setToken] = useState();
+  useEffect(() => {
+    function getproduct() {
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
 
+      if (token) {
+        setToken(token);
+      }}
+      getproduct();
+    }, []);
   //start coding
   const show = async (e) => {
 
     const Bardata = {code,quantity,Expiredate,Unitcost,Sellprice};
     //console.log(Bardata);
     // console.log(isEditing);
-    axios.post("http://localhost:8070/Bardata/add", Bardata)
+    axios.post("http://localhost:8070/Bardata/add", Bardata,{
+      headers: {
+        Authorization: `Bearer ${token}`, // Send token in Authorization header
+      }})
       .then(() => {  toast.success("Bar Item added succesfully");})
       .catch((err) => { alert(err); })
 
@@ -105,7 +117,10 @@ function BarAdd() {
       
       
       const BarInventory = { code,name , type, catogary, quantity,newTotCost,Reorderlevel,Location};
-      axios.post("http://localhost:8070/BarInventory/add", BarInventory)
+      axios.post("http://localhost:8070/BarInventory/add", BarInventory,{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }})
         .then(() => {  toast.success("Item added succesfully"); })
         .catch((err) => { toast.error("Item add operation failed") });
     
@@ -116,7 +131,10 @@ function BarAdd() {
       alert(Totalcost2)
       const url = "http://localhost:8070/BarInventory/update/"+ Product_Code1 ; 
       const BarInventory = { code,name , type, catogary, quantity2,Totalcost2,Reorderlevel};
-      axios.put(url, BarInventory)
+      axios.put(url, BarInventory,{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }})
         .then(() => {  toast.success("Item updated succesfully"); })
         .catch((err) => { toast.error("Item update operation failed") });
     }
@@ -126,7 +144,12 @@ function BarAdd() {
 
   useEffect(()=>{
     const getbarval = () =>{
-      axios.get("http://localhost:8070/barInventory/")
+      const token = localStorage.getItem("authToken");
+      axios.get("http://localhost:8070/barInventory/", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        },
+      })
       .then((barinventories)=>{
         setbar(barinventories.data);
       }).catch((err)=>{

@@ -7,12 +7,22 @@ import Bardata from "./Bardata.jsx";
 import { useState,useEffect } from "react";
 
 const Bar = () => {
-
+  const [token, setToken] = useState();
   const[barinv, setbar] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   useEffect(()=>{
     const getbarval = () =>{
-      axios.get("http://localhost:8070/barInventory/")
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
+
+      if (token) {
+        setToken(token);
+      }
+
+      axios.get("http://localhost:8070/barInventory/",{
+          headers: {
+            Authorization: `Bearer ${token}`, // Send token in Authorization header
+          },
+        })
       .then((barinventories)=>{
         setbar(barinventories.data);
       }).catch((err)=>{

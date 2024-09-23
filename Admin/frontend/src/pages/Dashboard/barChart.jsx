@@ -17,10 +17,23 @@ const BarChart = () => {
   }
 
   const [type, setType] = useState([]);
+  const [token, setToken] = useState();
+  useEffect(() => {
+    function getproduct() {
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
 
+      if (token) {
+        setToken(token);
+      }}
+      getproduct();
+    }, []);
   useEffect(() => {
     function getorder() {
-      axios.get("http://localhost:8070/order/type").then((res) => {
+      const token = localStorage.getItem("authToken");
+      axios.get("http://localhost:8070/order/type",{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }}).then((res) => {
         console.log(res.data);
         setType(res.data);
         // console.log(orders[1]);

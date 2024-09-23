@@ -8,9 +8,23 @@ import { AiOutlineLineChart } from 'react-icons/ai';
 const Order = () => {
 
   const [count, setCount] = useState("");
+  const [token, setToken] = useState();
+  useEffect(() => {
+    function getproduct() {
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
+
+      if (token) {
+        setToken(token);
+      }}
+      getproduct();
+    }, []);
   useEffect(() => {
     function getcount() {
-      axios.get("http://localhost:8070/order/count").then((res) => {
+      const token = localStorage.getItem("authToken");
+      axios.get("http://localhost:8070/order/count",{
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        }}).then((res) => {
         // console.log(res.data);
         setCount(res.data);
         // console.log(orders[1]);

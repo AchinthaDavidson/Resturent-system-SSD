@@ -4,8 +4,8 @@ const Bar = require('../models/barinventory');
 const barInv = require('../models/barinventory_data');
 const rateLimit = require('express-rate-limit');
 const { body, validationResult, param } = require('express-validator');
-
-
+const { authGurd } = require("../utils/validator");
+const { logUserAction } = require('../services/userActionLogService'); 
 // Rate limiting middleware
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -15,7 +15,7 @@ const apiLimiter = rateLimit({
 
 // Apply rate limiter to all routes
 router.use(apiLimiter);
-
+router.use(authGurd)
 /* add */
 router.route("/add").post(
     [
@@ -59,7 +59,9 @@ router.route("/add").post(
             ImageURL: Location
         });
 
-        newbar.save().then(() => {
+        newbar.save().then(async () => {
+            const authToken = req.headers['authorization'].split('Bearer ')[1];
+            await logUserAction(authToken, 'Added new bar item');
             res.json("Bottle added");
         }).catch((err) => {
             console.log(err);
@@ -98,7 +100,9 @@ router.route("/update/:id").put(
         };
 
         await Bar.updateOne({ Product_Code: userid }, { $set: updatebar })
-            .then(() => {
+            .then(async () => {
+                const authToken = req.headers['authorization'].split('Bearer ')[1];
+                await logUserAction(authToken, 'Update bar item');
                 res.status(200).send({ status: "bar inventory updated" });
             })
             .catch((err) => {
@@ -106,7 +110,23 @@ router.route("/update/:id").put(
                 res.status(500).send({ status: "bar inventory update failed", error: err });
             });
     });
+    router.route("/").get((req,res)=>{
 
+        Bar.find().sort({Product_Name:1}).then((bars)=>{
+            res.json(bars)
+        }).catch((err)=>{
+            console.log(err);
+        })
+    })
+    router.route("/sum/").get((req,res)=>{
+   
+        Bar.aggregate([{$group:{_id:null ,price:{$sum: "$Total_Cost"}}}]).then((Bar)=>{
+                    res.json(Bar)
+                }).catch((err)=>{
+                    console.log(err)
+                })
+            })
+    
 /* update by quantity */
 router.route("/updateqty").post(
     [
@@ -135,8 +155,10 @@ router.route("/updateqty").post(
             var Quantity3 = Number(qty - Quantity);
 
             Bar.updateOne({ Product_Code: id }, { $set: { Quantity: Quantity3 } })
-                .then(() => {
+                .then(async () => {
                     console.log("Inventory updated");
+                    const authToken = req.headers['authorization'].split('Bearer ')[1];
+                    await logUserAction(authToken, 'update bar data');
                 })
                 .catch((err) => {
                     console.log(err);

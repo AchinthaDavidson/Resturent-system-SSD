@@ -3,7 +3,8 @@ const router = express.Router();
 const faq = require("../models/faq");
 const { body, param, validationResult } = require('express-validator');
 const rateLimit = require('express-rate-limit');
-
+const { authGurd } = require("../utils/validator");
+const { logUserAction } = require('../services/userActionLogService'); 
 // Rate limiting middleware
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -12,7 +13,7 @@ const apiLimiter = rateLimit({
 });
 
 router.use(apiLimiter);
-
+router.use(authGurd)
 // Create FAQ
 router.route("/add").post(
     [
@@ -35,7 +36,9 @@ router.route("/add").post(
         });
 
         newFaq.save()
-            .then(() => res.json("New FAQ added"))
+            .then(async () =>{   const authToken = req.headers['authorization'].split('Bearer ')[1];
+                await logUserAction(authToken, 'Added new faq');
+                 res.json("New FAQ added")})
             .catch((err) => {
                 console.log(err);
                 res.status(500).send("Error adding FAQ");
@@ -84,6 +87,8 @@ router.route("/update/:id").put(
 
             // Save the updated document
             await faqItem.save();
+            const authToken = req.headers['authorization'].split('Bearer ')[1];
+            await logUserAction(authToken, 'update faq');
             res.status(200).send({ status: "FAQ updated" });
         } catch (err) {
             console.log(err);
@@ -107,6 +112,8 @@ router.route("/delete/:id").delete(
 
         try {
             await faq.findByIdAndDelete(fid);
+            const authToken = req.headers['authorization'].split('Bearer ')[1];
+            await logUserAction(authToken, 'delete');
             res.status(200).send({ status: "FAQ deleted" });
         } catch (err) {
             console.log(err.message);

@@ -18,6 +18,17 @@ function BarDelete() {
   const[Quantity1, setQuantity1] = useState(0);
   const[cost, setcost] = useState(0);
   const[Buy_Date1, setBuydate1] = useState();
+  const [token, setToken] = useState();
+
+  useEffect(() => {
+    function getproduct() {
+      const token = localStorage.getItem("authToken"); // Get token from localStorage
+
+      if (token) {
+        setToken(token);
+      }}
+      getproduct();
+    }, []);
 
   function findcode(code) {
     setCode(code);
@@ -25,8 +36,16 @@ function BarDelete() {
 
       function getItems(){
         const url = "http://localhost:8070/Bardata/find/"+code;
+        const token = localStorage.getItem("authToken"); // Get token from localStorage
 
-        axios.get(url).then((res)=>{
+        if (token) {
+          setToken(token);
+        }
+        axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send token in Authorization header
+          },
+        }).then((res)=>{
           setbar(res.data);
         });
       }
@@ -53,7 +72,11 @@ function BarDelete() {
   function deletedata(){
     for(var i = 0 ; i<=delete1.length-1 ; i++){
       const delete2 = "http://localhost:8070/Bardata/delete/"+ delete1[i]
-      axios.delete(delete2)
+      axios.delete(delete2, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        },
+      })
       .then(()=>{toast.success("Item deleted");})
       .catch((err)=>{toast.error("cannot delete data")});
     }
