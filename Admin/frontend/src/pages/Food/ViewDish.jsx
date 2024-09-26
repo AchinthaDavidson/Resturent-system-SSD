@@ -54,7 +54,6 @@ const ViewDish = () => {
     };
 
     const updateDish = (dish) => {
-       (post);
         setupdatedDish(dish);
         handleShow();
 
@@ -72,7 +71,6 @@ const ViewDish = () => {
     };
 
     const saveUpdatedDish = () => {
-       (updatedPost);
         axios.put(`http://localhost:8070/food/update/${updatedDish._id}` , updatedDish,{
             headers: {
               Authorization: `Bearer ${token}`, // Send token in Authorization header
