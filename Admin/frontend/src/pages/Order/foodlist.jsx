@@ -25,8 +25,6 @@ const Foodlist = (props) => {
             }}).then(res=>{
             ;
             setFoodlists(res.data);
-           (orders[1])
-            
           });
       }
       getfoodlist();
