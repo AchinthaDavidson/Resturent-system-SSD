@@ -41,7 +41,7 @@ const RestaurantDelete = () => {
               }}).then((res) => {
               // ;
               setItems(res.data);
-              (orders[1]);
+              
             });
           }
           getItems();

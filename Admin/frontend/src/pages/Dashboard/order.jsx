@@ -27,7 +27,6 @@ const Order = () => {
         }}).then((res) => {
         // ;
         setCount(res.data);
-        (orders[1]);
       });
     }
     getcount();

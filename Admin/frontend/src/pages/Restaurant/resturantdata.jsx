@@ -25,9 +25,7 @@ const Resturantdata = (props) => {
           headers: {
             Authorization: `Bearer ${token}`, // Send token in Authorization header
           }}).then((res) => {
-          ;
           setdata(res.data);
-          (orders[1]);
         });
       }
       getItems1();

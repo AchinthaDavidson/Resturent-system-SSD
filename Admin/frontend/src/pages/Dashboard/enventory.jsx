@@ -27,7 +27,6 @@ const Customer = () => {
         }}).then((res) => {
         // ;
         setRessum(res.data[0].price);
-        (orders[1]);
       });
     }
     getcount();
@@ -43,7 +42,6 @@ const Customer = () => {
         }}).then((res) => {
         // ;
         setbarsum(res.data[0].price);
-        (orders[1]);
       });
     }
     getcount();

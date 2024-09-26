@@ -26,7 +26,7 @@ import Resdata from "./resturantdata.jsx"
           }}).then((res) => {
           // ;
           setItems(res.data);
-          (orders[1]);
+          
         });
       }
       getItems();

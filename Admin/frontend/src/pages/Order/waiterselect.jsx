@@ -23,7 +23,7 @@ useEffect(() => {
             }}).then((res) => {
             // ;
             setwaiter(res.data);
-            (orders[1]);
+            
           });
         }
         getwaiter();
