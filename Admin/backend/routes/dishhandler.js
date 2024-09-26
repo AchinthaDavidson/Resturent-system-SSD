@@ -34,8 +34,6 @@ Dish.create({
 })
     .then((doc)=> console.log(doc))
     .catch((err) => console.log(err));
-
-console.log(req.body);
 });
 
 

@@ -17,7 +17,6 @@ const apiLimiter = rateLimit({
 
 /*add*/
 router.route("/add").post((req,res)=>{
-    console.log("hi")
     const d = new Date();
     const Item_Id = req.body.id;
     const Quantity =Number(req.body.quantity);

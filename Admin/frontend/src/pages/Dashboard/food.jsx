@@ -26,9 +26,9 @@ const Food = () => {
         headers: {
           Authorization: `Bearer ${token}`, // Send token in Authorization header
         }}).then((res) => {
-        // console.log(res.data);
+        // ;
         setCount(res.data);
-        // console.log(orders[1]);
+        (orders[1]);
       });
     }
     getcount();

@@ -24,9 +24,9 @@ import Resdata from "./resturantdata.jsx"
           headers: {
             Authorization: `Bearer ${token}`, // Send token in Authorization header
           }}).then((res) => {
-          // console.log(res.data);
+          // ;
           setItems(res.data);
-          // console.log(orders[1]);
+          (orders[1]);
         });
       }
       getItems();

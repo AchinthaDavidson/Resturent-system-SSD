@@ -6,7 +6,6 @@ export default function OtpInput({ count = 4, action, error }) {
   const [otp, setOtp] = useState(Array(count).fill(""));
 
   const handleKeyUp = (e) => {
-    console.log(e.keyCode);
     if (e.keyCode === 8) {
       const prevSibling = e.target.previousSibling;
       if (prevSibling) return prevSibling.focus();

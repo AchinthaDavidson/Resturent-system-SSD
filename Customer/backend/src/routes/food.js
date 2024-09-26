@@ -30,7 +30,7 @@ const newfood=new food({
     
     })
 
-   // console.log(req.body);
+
     newfood.save().then(()=>{
 
     }).catch((err)=>{

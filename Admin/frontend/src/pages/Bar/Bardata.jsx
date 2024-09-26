@@ -22,7 +22,6 @@ const Bardata = (props) => {
                 Authorization: `Bearer ${token}`, // Send token in Authorization header
               },
             }).then((res)=>{
-                //console.log(res.data);
                 setdata1(res.data);
             });
         }

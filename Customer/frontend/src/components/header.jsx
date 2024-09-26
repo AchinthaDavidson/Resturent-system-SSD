@@ -5,10 +5,6 @@ import '../components/header.css';
 import logo from '../Images/logo.png';
 // import { Outlet, Link } from "react-router-dom";
 
-
-console.log(logo);
-
-
 function Header(){
 
     const [isprofile, setprofil] = useState(false);
@@ -28,7 +24,6 @@ function Header(){
       else{
 
       setprofil(true)
-      console.log(res);
       setUser(res);
       }
     }, []);

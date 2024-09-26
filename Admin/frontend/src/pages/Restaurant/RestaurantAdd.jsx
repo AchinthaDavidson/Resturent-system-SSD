@@ -88,9 +88,7 @@ const [items, setItems] = useState([]);
       headers: {
         Authorization: `Bearer ${token}`, // Send token in Authorization header
       }}).then((res) => {
-          // console.log(res.data);
           setItems(res.data);
-          // console.log(orders[1]);
         });
       }
       getItems();

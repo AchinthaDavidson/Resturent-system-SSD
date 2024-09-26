@@ -140,7 +140,6 @@ router.route("/update1/:id").post(async(req,res)=>{
         var cost1 =Restaurant[0].Total_Cost
 
         update2(Quantity1,cost1)
-        console.log(Restaurant)
         const authToken = req.headers['authorization'].split('Bearer ')[1];
         await logUserAction(authToken, 'Added new inventory item');
     }).catch((err)=>{
@@ -183,7 +182,6 @@ router.route("/updateqty").post(async (req, res) => {
             }
 
             const Ingridients = food.Ingridients;
-            console.log("hi restaurant");
 
             Ingridient(Ingridients, Id[i].quantity);
         }).catch((err) => {

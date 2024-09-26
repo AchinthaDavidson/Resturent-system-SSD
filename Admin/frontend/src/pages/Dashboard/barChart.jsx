@@ -34,9 +34,9 @@ const BarChart = () => {
         headers: {
           Authorization: `Bearer ${token}`, // Send token in Authorization header
         }}).then((res) => {
-        console.log(res.data);
+
         setType(res.data);
-        // console.log(orders[1]);
+
       });
     }
     getorder();
@@ -83,8 +83,7 @@ const BarChart = () => {
 
 
   console.log(Dining);
-  // console.log(Delivery);
-  // console.log(Takeaway);
+
   
 
   const grossProductData = [

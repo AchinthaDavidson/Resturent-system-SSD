@@ -25,9 +25,7 @@ const Driver = () => {
         headers: {
           Authorization: `Bearer ${token}`, // Send token in Authorization header
         }}).then((res) => {
-        // console.log(res.data);
         setdriver(res.data);
-        // console.log(orders[1]);
       });
     }
     getdriver();

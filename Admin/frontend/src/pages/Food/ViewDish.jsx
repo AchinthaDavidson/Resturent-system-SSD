@@ -35,7 +35,7 @@ const ViewDish = () => {
               Authorization: `Bearer ${token}`, // Send token in Authorization header
             }})
         .then((res) => {
-           // console.log(res.data);
+           // ;
             setDishes(res.data);
         })
         .catch((err) =>console.log(err))
@@ -54,7 +54,7 @@ const ViewDish = () => {
     };
 
     const updateDish = (dish) => {
-       // console.log(post);
+       (post);
         setupdatedDish(dish);
         handleShow();
 
@@ -62,7 +62,7 @@ const ViewDish = () => {
 
     const handleChange = (e) => {
         const {name , value } = e.target;
-       // console.log(e);
+       (e);
         setupdatedDish((prev) => {
             return({
                 ...prev,
@@ -72,7 +72,7 @@ const ViewDish = () => {
     };
 
     const saveUpdatedDish = () => {
-       // console.log(updatedPost);
+       (updatedPost);
         axios.put(`http://localhost:8070/food/update/${updatedDish._id}` , updatedDish,{
             headers: {
               Authorization: `Bearer ${token}`, // Send token in Authorization header
