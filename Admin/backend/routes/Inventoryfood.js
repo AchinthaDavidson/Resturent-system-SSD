@@ -12,7 +12,7 @@ const apiLimiter = rateLimit({
 });
 
 // Apply rate limiter to all routes
-// router.use(apiLimiter);
+router.use(apiLimiter);
 // router.use(authGurd)
 
 /*add*/
