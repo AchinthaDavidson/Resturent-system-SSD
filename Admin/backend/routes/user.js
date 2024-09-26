@@ -26,6 +26,6 @@ userRouter.post("/login", authLimiter, validate([
   body("password").isLength({ min: 5 })
 ]), userLogin);
 
-userRouter.get("/current-user", authGurd, currentUser);
+userRouter.get("/current-user",authLimiter, authGurd, currentUser);
 
 module.exports = userRouter;

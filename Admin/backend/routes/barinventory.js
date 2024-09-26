@@ -141,7 +141,7 @@ router.route("/updateqty").post(
 
         // Iterate over the list
         for (let i = 0; i < list.length; i++) {
-            Bar.find({ Product_Code: list[i].description }).then((Bar) => {
+            Bar.find({ Product_Code: { $eq: list[i].description } }).then((Bar) => {
                 const Quantity1 = Bar[0].Quantity;
 
                 update2(Quantity1, list[i].quantity, list[i].description);
