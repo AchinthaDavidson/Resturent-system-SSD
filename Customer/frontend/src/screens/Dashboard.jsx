@@ -15,7 +15,7 @@ const genderOptions = [
   { key: "Female", value: "female" },
 ];
 
-const secretKey = "your-secret-key"; // Use a secure key in production
+const secretKey = process.env.ENCRYPT_KEY; // Use a secure key in production
 
 function encryptData(data) {
   return CryptoJS.AES.encrypt(JSON.stringify(data), secretKey).toString();
