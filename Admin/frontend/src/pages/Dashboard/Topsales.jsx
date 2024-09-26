@@ -24,7 +24,6 @@ function Topsales() {
         }}).then((res) => {
         // ;
         setOrders(res.data);
-        (orders[1]);
       });
     }
     getorder();

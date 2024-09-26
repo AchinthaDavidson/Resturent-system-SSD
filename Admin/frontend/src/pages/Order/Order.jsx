@@ -81,7 +81,7 @@ function Order() {
         }}).then((res) => {
         // ;
         setOrders(res.data);
-        (orders[1]);
+        
       });
     }
     getorder();
@@ -96,7 +96,7 @@ function Order() {
         }}).then((res) => {
         // ;
         setBar(res.data);
-        (orders[1]);
+        
       });
     }
     getbar();
@@ -237,7 +237,7 @@ function handleChange(value){
         }}).then((res) => {
         // ;
         setwaiter(res.data);
-        (orders[1]);
+        
       });
     }
     getwaiter();
