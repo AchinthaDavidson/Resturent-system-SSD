@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/dashboard.css";
 import Header from "../components/header";
+import CryptoJS from "crypto-js";
 
 // import Navbar from "../components/Navbar";
 import TextInput from "../components/TextInput";
@@ -13,6 +14,17 @@ const genderOptions = [
   { key: "Male", value: "male" },
   { key: "Female", value: "female" },
 ];
+
+const secretKey = "your-secret-key"; // Use a secure key in production
+
+function encryptData(data) {
+  return CryptoJS.AES.encrypt(JSON.stringify(data), secretKey).toString();
+}
+
+function decryptData(ciphertext) {
+  const bytes = CryptoJS.AES.decrypt(ciphertext, secretKey);
+  return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+}
 
 export default function Dashboard() {
   const [user, setUser] = useState();
@@ -28,7 +40,7 @@ export default function Dashboard() {
   const handleGenderChange = (e) => setGender(e.target.value);
   const handleAddressChange = (e) => setAddress(e.target.value);
   useEffect(() => {
-    let res = JSON.parse(localStorage.getItem("userData"));
+    let res = decryptData(localStorage.getItem("userData"));
     if (!res) window.location.href = "/";
     setUser(res);
   }, []);
@@ -55,7 +67,7 @@ export default function Dashboard() {
           user: { name, email, phoneNumber, address, gender },
           Authorization: user.Authorization,
         };
-        localStorage.setItem("userData", JSON.stringify(newData));
+        localStorage.setItem("userData", encryptData(newData));
         window.location.href = "/dashboard";
       }
     });
