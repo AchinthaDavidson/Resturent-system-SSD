@@ -6,11 +6,9 @@ import { useState, useRef, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { v4 as uuidv4 } from "uuid";
- import S3 from 'react-aws-s3';
-import AWS from 'aws-sdk';
+import S3 from "react-aws-s3";
+import AWS from "aws-sdk";
 window.Buffer = window.Buffer || require("buffer").Buffer;
-
-
 
 function BarAdd() {
   const d = new Date();
@@ -24,32 +22,31 @@ function BarAdd() {
   const [Unitcost, setUnitcost] = useState("");
   const [Reorderlevel, setReorderlevel] = useState("");
   const [Sellprice, setSellprice] = useState("");
-  const[ImageURL,setImageURL]=useState("");
+  const [ImageURL, setImageURL] = useState("");
 
-  const s3 = new AWS.S3(); 
+  const s3 = new AWS.S3();
   const [file, setFile] = useState(null);
-  const validFileTypes = ['image/jpg','image/jpeg','image/png'];
+  const validFileTypes = ["image/jpg", "image/jpeg", "image/png"];
   AWS.config.update({
-    accessKeyId: 'AKIAV3TWWOPNV5Z3UJ6X' ,
-    secretAccessKey: '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',
-    dirName: 'images',
-    region: 'ap-south-1',
-    signatureVersion: 'v4',
+    accessKeyId: process.env.ACCESS_ID,
+    secretAccessKey: process.env>SECRET_KEY_AWS,
+    dirName: "images",
+    region: "ap-south-1",
+    signatureVersion: "v4",
   });
 
   const handleFileSelect = (e) => {
-  
-
     const file_ = e.target.files[0];
 
-    if (!validFileTypes.find(type => type === file_.type)) {
-    
-        toast.error("Enter the dish Name first. Then select an JPG/PNG file type.");
-        return;
-    }else{
-        setFile(e.target.files[0]);
-    }   
-  }
+    if (!validFileTypes.find((type) => type === file_.type)) {
+      toast.error(
+        "Enter the dish Name first. Then select an JPG/PNG file type."
+      );
+      return;
+    } else {
+      setFile(e.target.files[0]);
+    }
+  };
 
   const [Buydate, setBuydate] = useState(
     d.getUTCDate() +
@@ -63,16 +60,16 @@ function BarAdd() {
       ":" +
       d.getMinutes()
   );
-  const[Product_Code1, setproduct_code1] = useState("");
-  const[Product_Name1, setproduct_Name1] = useState("");
-  const[Product_Type1, setproduct_Type1] = useState("");
-  const [Stock,setstock]=useState();
-  const [Total,setTotal] = useState("");
-  const[Expire_Date1, setExpire_Date1] = useState("");
-  const[Quantity1, setQuantity1] = useState("");
-  const[Re_Order_Level1, setRe_Order_Level1] = useState("");
+  const [Product_Code1, setproduct_code1] = useState("");
+  const [Product_Name1, setproduct_Name1] = useState("");
+  const [Product_Type1, setproduct_Type1] = useState("");
+  const [Stock, setstock] = useState();
+  const [Total, setTotal] = useState("");
+  const [Expire_Date1, setExpire_Date1] = useState("");
+  const [Quantity1, setQuantity1] = useState("");
+  const [Re_Order_Level1, setRe_Order_Level1] = useState("");
   // const[Stock,setstock]=useState("");
-  const[isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [token, setToken] = useState();
   useEffect(() => {
     function getproduct() {
@@ -80,24 +77,30 @@ function BarAdd() {
 
       if (token) {
         setToken(token);
-      }}
-      getproduct();
-    }, []);
+      }
+    }
+    getproduct();
+  }, []);
   //start coding
   const show = async (e) => {
+    const Bardata = { code, quantity, Expiredate, Unitcost, Sellprice };
 
-    const Bardata = {code,quantity,Expiredate,Unitcost,Sellprice};
+    axios
+      .post("http://localhost:8070/Bardata/add", Bardata, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        },
+      })
+      .then(() => {
+        toast.success("Bar Item added succesfully");
+      })
+      .catch((err) => {
+        alert(err);
+      });
 
-    axios.post("http://localhost:8070/Bardata/add", Bardata,{
-      headers: {
-        Authorization: `Bearer ${token}`, // Send token in Authorization header
-      }})
-      .then(() => {  toast.success("Bar Item added succesfully");})
-      .catch((err) => { alert(err); })
+    const newTotCost = quantity * Unitcost;
 
-    const newTotCost = quantity * Unitcost
-
-    if (isEditing===false) {
+    if (isEditing === false) {
       if (!file) {
         toast.error("Please select an image of JPG or PNG file type...");
         return;
@@ -106,66 +109,93 @@ function BarAdd() {
         toast.error("Please ente a valid name...");
         return;
       }
-      const params = { 
-        Bucket: 'paladiumdishes', 
-        Key: `${Date.now()}.${name}`, 
-        Body: file 
+      const params = {
+        Bucket: "paladiumdishes",
+        Key: `${Date.now()}.${name}`,
+        Body: file,
       };
-        const { Location } = await s3.upload(params).promise();
-        setImageURL(Location);
-      
-      
-      const BarInventory = { code,name , type, catogary, quantity,newTotCost,Reorderlevel,Location};
-      axios.post("http://localhost:8070/BarInventory/add", BarInventory,{
-        headers: {
-          Authorization: `Bearer ${token}`, // Send token in Authorization header
-        }})
-        .then(() => {  toast.success("Item added succesfully"); })
-        .catch((err) => { toast.error("Item add operation failed") });
-    
-    }
-    else {
-      const quantity2=Number(quantity)+Number(Quantity1)
-      const Totalcost2=Number(Total+newTotCost)
-      alert(Totalcost2)
-      const url = "http://localhost:8070/BarInventory/update/"+ Product_Code1 ; 
-      const BarInventory = { code,name , type, catogary, quantity2,Totalcost2,Reorderlevel};
-      axios.put(url, BarInventory,{
-        headers: {
-          Authorization: `Bearer ${token}`, // Send token in Authorization header
-        }})
-        .then(() => {  toast.success("Item updated succesfully"); })
-        .catch((err) => { toast.error("Item update operation failed") });
-    }
-  }
+      const { Location } = await s3.upload(params).promise();
+      setImageURL(Location);
 
-  const[items, setbar] = useState([]);
+      const BarInventory = {
+        code,
+        name,
+        type,
+        catogary,
+        quantity,
+        newTotCost,
+        Reorderlevel,
+        Location,
+      };
+      axios
+        .post("http://localhost:8070/BarInventory/add", BarInventory, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send token in Authorization header
+          },
+        })
+        .then(() => {
+          toast.success("Item added succesfully");
+        })
+        .catch((err) => {
+          toast.error("Item add operation failed");
+        });
+    } else {
+      const quantity2 = Number(quantity) + Number(Quantity1);
+      const Totalcost2 = Number(Total + newTotCost);
+      alert(Totalcost2);
+      const url = "http://localhost:8070/BarInventory/update/" + Product_Code1;
+      const BarInventory = {
+        code,
+        name,
+        type,
+        catogary,
+        quantity2,
+        Totalcost2,
+        Reorderlevel,
+      };
+      axios
+        .put(url, BarInventory, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send token in Authorization header
+          },
+        })
+        .then(() => {
+          toast.success("Item updated succesfully");
+        })
+        .catch((err) => {
+          toast.error("Item update operation failed");
+        });
+    }
+  };
 
-  useEffect(()=>{
-    const getbarval = () =>{
+  const [items, setbar] = useState([]);
+
+  useEffect(() => {
+    const getbarval = () => {
       const token = localStorage.getItem("authToken");
-      axios.get("http://localhost:8070/barInventory/", {
-        headers: {
-          Authorization: `Bearer ${token}`, // Send token in Authorization header
-        },
-      })
-      .then((barinventories)=>{
-        setbar(barinventories.data);
-      }).catch((err)=>{
-        alert(err);
-      })
-    }
+      axios
+        .get("http://localhost:8070/barInventory/", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send token in Authorization header
+          },
+        })
+        .then((barinventories) => {
+          setbar(barinventories.data);
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    };
     getbarval();
-  },[])
+  }, []);
 
-  function findcode(code){
+  function findcode(code) {
     setCode(code);
-    if(code.length === 3 || code.length === 2){
-      
-      items.map((items)=>{
-        if(items.Product_Code.includes(code)===true){
+    if (code.length === 3 || code.length === 2) {
+      items.map((items) => {
+        if (items.Product_Code.includes(code) === true) {
           setproduct_code1(items.Product_Code);
-          setproduct_Name1(items.Product_Name); 
+          setproduct_Name1(items.Product_Name);
           setproduct_Type1(items.Product_Type);
           setQuantity1(items.Quantity);
           setTotal(items.Total_Cost);
@@ -173,14 +203,14 @@ function BarAdd() {
           setRe_Order_Level1(items.Re_Order_Level);
           setIsEditing(true);
         }
-      })
+      });
     }
   }
 
   return (
     <div>
       <Niv name="Bar Inventory" />
-      <ToastContainer position="top-right" theme="colored" /> 
+      <ToastContainer position="top-right" theme="colored" />
       <div className="data">
         <div className="cardadd">
           <header className="baraddheader">Add Details</header>
@@ -261,7 +291,7 @@ function BarAdd() {
                     <input
                       type="text"
                       placeholder="ttotal cost"
-                      value={(quantity*Unitcost)||0}
+                      value={quantity * Unitcost || 0}
                       onChange={(e) => setTotalcost(e.target.value)}
                     />
                   </div>
@@ -304,10 +334,14 @@ function BarAdd() {
                   </div>
                 </div>
 
-                <button class="BarAdd" type="submit" onClick={(e)=>{
-                 setTotalcost(quantity*Unitcost)
-                  show(e)
-                  }}>
+                <button
+                  class="BarAdd"
+                  type="submit"
+                  onClick={(e) => {
+                    setTotalcost(quantity * Unitcost);
+                    show(e);
+                  }}
+                >
                   <span class="addbtn">{isEditing ? "Edit" : "Add"}</span>
                 </button>
               </div>

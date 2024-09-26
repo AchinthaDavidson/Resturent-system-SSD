@@ -1,7 +1,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const APP_SECRET = 'my-app-secret';
+const APP_SECRET =  process.env.APP_SECRET
+
 const JWT_OPTIONS = {
   algorithm: "HS256",
   issuer: "davidson.com/api",
