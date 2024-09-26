@@ -25,9 +25,7 @@ const Order = () => {
         headers: {
           Authorization: `Bearer ${token}`, // Send token in Authorization header
         }}).then((res) => {
-        // console.log(res.data);
         setOrders(res.data);
-        // console.log(orders[1]);
       });
     }
     getorder();

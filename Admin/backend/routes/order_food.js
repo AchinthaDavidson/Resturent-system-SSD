@@ -19,14 +19,10 @@ router.use(authGurd)
 // ADD order food
 router.route("/add").post((req,res)=>{
 
-    console.log("hi2");
-
     const order_id =req.body.order_id;
     const food_id   =req.body.description;
     const  qty  =req.body.quantity;
   
-
-
     const neworder_food =new  order_food({
         order_id,
        food_id,

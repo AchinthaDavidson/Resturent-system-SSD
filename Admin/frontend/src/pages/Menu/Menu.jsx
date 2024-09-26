@@ -28,9 +28,7 @@ const Menu = () => {
           },
         })
         .then((res) => {
-          // console.log(res.data);
           setProduct(res.data);
-          // console.log(orders[1]);
         });
     }
     getproduct();

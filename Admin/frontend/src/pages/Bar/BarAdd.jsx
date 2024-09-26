@@ -87,8 +87,7 @@ function BarAdd() {
   const show = async (e) => {
 
     const Bardata = {code,quantity,Expiredate,Unitcost,Sellprice};
-    //console.log(Bardata);
-    // console.log(isEditing);
+
     axios.post("http://localhost:8070/Bardata/add", Bardata,{
       headers: {
         Authorization: `Bearer ${token}`, // Send token in Authorization header

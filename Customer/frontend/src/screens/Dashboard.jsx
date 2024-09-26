@@ -30,7 +30,6 @@ export default function Dashboard() {
   useEffect(() => {
     let res = JSON.parse(localStorage.getItem("userData"));
     if (!res) window.location.href = "/";
-    console.log(res);
     setUser(res);
   }, []);
   useEffect(() => {

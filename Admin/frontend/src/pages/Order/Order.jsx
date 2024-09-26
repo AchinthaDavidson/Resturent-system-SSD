@@ -79,9 +79,9 @@ function Order() {
         headers: {
           Authorization: `Bearer ${token}`, // Send token in Authorization header
         }}).then((res) => {
-        // console.log(res.data);
+        // ;
         setOrders(res.data);
-        // console.log(orders[1]);
+        (orders[1]);
       });
     }
     getorder();
@@ -94,9 +94,9 @@ function Order() {
         headers: {
           Authorization: `Bearer ${token}`, // Send token in Authorization header
         }}).then((res) => {
-        // console.log(res.data);
+        // ;
         setBar(res.data);
-        // console.log(orders[1]);
+        (orders[1]);
       });
     }
     getbar();
@@ -235,9 +235,9 @@ function handleChange(value){
         headers: {
           Authorization: `Bearer ${token}`, // Send token in Authorization header
         }}).then((res) => {
-        // console.log(res.data);
+        // ;
         setwaiter(res.data);
-        // console.log(orders[1]);
+        (orders[1]);
       });
     }
     getwaiter();
@@ -443,7 +443,7 @@ function handleChange(value){
       headers: {
         Authorization: `Bearer ${token}`, // Send token in Authorization header
       }}).then((res) => {
-      console.log(res.data);
+      ;
       setorder_id(res.data);
     });
   }, []);
@@ -460,7 +460,7 @@ function handleChange(value){
       headers: {
         Authorization: `Bearer ${token}`, // Send token in Authorization header
       }}).then((res) => {
-      // console.log(res.data);
+      // ;
       setcustomer(res.data);
     });
   }, []);

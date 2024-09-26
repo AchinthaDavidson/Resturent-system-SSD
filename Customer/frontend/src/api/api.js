@@ -113,7 +113,7 @@ export function restPass(formData) {
 //     axios
 //     .get("http://localhost:5000/auth/dish")
 //     .then((res) => {
-//        console.log(res.data);
+//        ;
 //        console.log("hi")
 //         // setDishes(res.data);
 //     })

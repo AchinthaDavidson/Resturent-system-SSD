@@ -10,10 +10,6 @@ import Footer from "../../components/Footer.jsx";
 import './Homepage.css';
 import { useNavigate } from "react-router-dom";
 
-console.log(logo);
-
-
-
 function Homepage(){
 
   let navigate = useNavigate(); 

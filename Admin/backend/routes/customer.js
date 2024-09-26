@@ -18,7 +18,6 @@ router.use(authGurd)
 // ADD coustomer
 router.route("/add").post((req,res)=>{
 
-    console.log("hi");
     const  name     =req.body.name;
     const  Email    =req.body.email;
     const  address  =req.body.address;

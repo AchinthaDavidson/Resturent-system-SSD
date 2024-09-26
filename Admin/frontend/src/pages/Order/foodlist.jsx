@@ -23,9 +23,9 @@ const Foodlist = (props) => {
             headers: {
               Authorization: `Bearer ${token}`, // Send token in Authorization header
             }}).then(res=>{
-            console.log(res.data);
+            ;
             setFoodlists(res.data);
-          // console.log (orders[1])
+           (orders[1])
             
           });
       }

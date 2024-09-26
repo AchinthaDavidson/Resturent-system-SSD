@@ -53,7 +53,6 @@ router.route("/add").post((req,res)=>{
         status,    
         location
     })
-    console.log(neworder)
     neworder.save().then(async ()=>{
         const authToken = req.headers['authorization'].split('Bearer ')[1];
         await logUserAction(authToken, 'Added new inventory item');

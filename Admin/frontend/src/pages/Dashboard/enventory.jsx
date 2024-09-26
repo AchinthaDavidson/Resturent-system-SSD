@@ -25,9 +25,9 @@ const Customer = () => {
         headers: {
           Authorization: `Bearer ${token}`, // Send token in Authorization header
         }}).then((res) => {
-        // console.log(res.data);
+        // ;
         setRessum(res.data[0].price);
-        // console.log(orders[1]);
+        (orders[1]);
       });
     }
     getcount();
@@ -41,9 +41,9 @@ const Customer = () => {
         headers: {
           Authorization: `Bearer ${token}`, // Send token in Authorization header
         }}).then((res) => {
-        // console.log(res.data);
+        // ;
         setbarsum(res.data[0].price);
-        // console.log(orders[1]);
+        (orders[1]);
       });
     }
     getcount();

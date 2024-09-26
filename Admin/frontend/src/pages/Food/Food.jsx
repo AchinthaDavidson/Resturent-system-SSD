@@ -69,9 +69,7 @@ function CreateFoodJS(){
             headers: {
               Authorization: `Bearer ${token}`, // Send token in Authorization header
             }}).then((res) => {
-          //  console.log(res.data);
             setCategory(res.data);
-          // console.log(orders[1]);
         });
       }
       getproduct();
@@ -84,7 +82,7 @@ function CreateFoodJS(){
             headers: {
               Authorization: `Bearer ${token}`, // Send token in Authorization header
             }}).then((res) => {
-        //console.log(res.data);
+        //;
         setItems(res.data);
       
         });
@@ -156,7 +154,6 @@ function CreateFoodJS(){
         };
             const { Location } = await s3.upload(params).promise();
             dish.ImageURL = Location;
-           // console.log('uploading to s3', Location);
 
         if (!dish.ImageURL) {
             toast.error("Image uploading error occured. Dish will not be added...");
@@ -170,7 +167,7 @@ function CreateFoodJS(){
               Authorization: `Bearer ${token}`, // Send token in Authorization header
             }})  // this need to change
         .then( (res) => {
-            //console.log(res);
+
             toast.success("Dish added succesfully");
             
         })
@@ -204,7 +201,6 @@ function CreateFoodJS(){
 
                 ingredient.map((ing) =>{
                     c += ing.cost;
-                   // console.log(c);
                     setIngCost(c);
                 })   
     
