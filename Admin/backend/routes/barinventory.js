@@ -154,7 +154,7 @@ router.route("/updateqty").post(
         function update2(qty, Quantity, id) {
             var Quantity3 = Number(qty - Quantity);
 
-            Bar.updateOne({ Product_Code: id }, { $set: { Quantity: Quantity3 } })
+            Bar.updateOne({ Product_Code: { $eq: id } }, { $set: { Quantity: Quantity3 } })
                 .then(async () => {
                     console.log("Inventory updated");
                     const authToken = req.headers['authorization'].split('Bearer ')[1];

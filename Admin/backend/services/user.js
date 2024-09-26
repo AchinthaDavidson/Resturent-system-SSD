@@ -13,7 +13,7 @@ async function findUserById(email) {
         throw new Error('Invalid email format');
     }
 
-    const existingUser = await User.findOne({ email : email });
+    const acc = await User.findOne({ email: { $eq: email } });
     const userPayload = JSON.parse(JSON.stringify(existingUser));
     
     if (userPayload) {
@@ -53,7 +53,7 @@ async function login(email, password) {
         throw new Error('Invalid email format');
     }
 
-    const acc = await User.findOne({ email: email });
+    const acc = await User.findOne({ email: { $eq: email } });
 
     if (!acc) {
         throw new Error('User not found');
